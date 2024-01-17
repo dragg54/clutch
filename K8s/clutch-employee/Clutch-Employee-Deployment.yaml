@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clutch-employee-deployment
+  labels:
+        app: clutch-employee
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: clutch-employee
+  template:
+    metadata:
+      labels:
+        app: clutch-employee
+    spec:
+      containers:
+        - name: clutch-employee
+          image: dragg54/clutch-employee:tagname
+          ports:
+          - containerPort: 80

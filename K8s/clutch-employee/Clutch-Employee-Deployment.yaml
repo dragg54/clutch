@@ -19,3 +19,17 @@ spec:
           image: dragg54/clutch-employee:tagname
           ports:
           - containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: clutch-employee-clusterip-srv
+spec:
+  selector:
+    app: clutch-employee
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

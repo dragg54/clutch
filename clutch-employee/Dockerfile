@@ -9,7 +9,7 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["clutch-employee.csproj", "."]
 RUN dotnet restore "./clutch-employee.csproj"
-COPY . .
+COPY . ./
 WORKDIR "/src/."
 RUN dotnet build "clutch-employee.csproj" -c Release -o /app/build
 

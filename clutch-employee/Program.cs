@@ -1,7 +1,10 @@
 using clutch_employee.Data.Contexts;
+using clutch_employee.Exceptions;
+using clutch_employee.Infrastructure.Middlewares;
 using clutch_employee.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +14,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+//builder.Services.AddHttpsRedirection(opt => opt.HttpsPort = 443);
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddDbContext<EmployeeDbContext>(options =>
 {
@@ -19,19 +23,20 @@ builder.Services.AddDbContext<EmployeeDbContext>(options =>
 
 });
 
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
-app.UseHttpsRedirection();
+app.UseSwagger();
+app.UseSwaggerUI();
+
+
+// app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.Run();

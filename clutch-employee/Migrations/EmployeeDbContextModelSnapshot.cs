@@ -21,11 +21,16 @@ namespace clutch_employee.Migrations
 
             modelBuilder.Entity("clutch_employee.Models.Employee", b =>
                 {
-                    b.Property<string>("EmployeeId")
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
 
                     b.Property<int>("Age")
                         .HasColumnType("int");
+
+                    b.Property<string>("EmployeeId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<int>("EmployeeStatus")
                         .HasColumnType("int");
@@ -45,7 +50,7 @@ namespace clutch_employee.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime(6)");
 
-                    b.HasKey("EmployeeId");
+                    b.HasKey("Id");
 
                     b.ToTable("Employees");
                 });

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace clutch_employee.Migrations
 {
-    public partial class IntialMigration : Migration
+    public partial class NewMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,7 +16,8 @@ namespace clutch_employee.Migrations
                 name: "Employees",
                 columns: table => new
                 {
-                    EmployeeId = table.Column<string>(type: "varchar(255)", nullable: false)
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    EmployeeId = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PositionUniqueReferenceNumber = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -30,7 +31,7 @@ namespace clutch_employee.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Employees", x => x.EmployeeId);
+                    table.PrimaryKey("PK_Employees", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
         }

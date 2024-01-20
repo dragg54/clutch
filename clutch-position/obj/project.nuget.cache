@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "bv/EPtbPH7Pgm2zIOIKegHQ0Pcti86dtUrbS+mm3Unt7bq/EzdgSNZKhgp0CtTMcNDynlNgSae7NlHLY1OnCcg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\HP 840 G5\\personal_projects\\clutch\\clutch-position\\clutch-position.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\HP 840 G5\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
+    "C:\\Users\\HP 840 G5\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\HP 840 G5\\.nuget\\packages\\swashbuckle.aspnetcore\\6.2.3\\swashbuckle.aspnetcore.6.2.3.nupkg.sha512",
+    "C:\\Users\\HP 840 G5\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.2.3\\swashbuckle.aspnetcore.swagger.6.2.3.nupkg.sha512",
+    "C:\\Users\\HP 840 G5\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.2.3\\swashbuckle.aspnetcore.swaggergen.6.2.3.nupkg.sha512",
+    "C:\\Users\\HP 840 G5\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.2.3\\swashbuckle.aspnetcore.swaggerui.6.2.3.nupkg.sha512"
+  ],
+  "logs": []
+}

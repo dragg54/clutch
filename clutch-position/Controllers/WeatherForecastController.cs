@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace clutch_employee.Controllers
+namespace clutch_position.Controllers
 {
     [ApiController]
     [Route("[controller]")]

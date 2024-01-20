@@ -6,7 +6,7 @@ namespace clutch_employee.Models
     public class Employee
     {
         [Key]
-        public string Id { get; }
+        public Guid Id { get; set; }
 
         [Required]
         public string EmployeeId { get; set; }

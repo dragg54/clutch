@@ -5,6 +5,8 @@ namespace clutch_employee.Requests
 {
     public class PostEmployeeRequest
     {
+        public Guid Id { get => Guid.NewGuid(); }
+
         [Required]
         public string EmployeeId { get; set; }
 

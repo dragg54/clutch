@@ -1,0 +1,10 @@
+﻿namespace clutch_employee.Exceptions
+{
+    [Serializable]
+    public class DuplicateException:Exception
+    {
+        public DuplicateException() { }
+
+        public DuplicateException(string message) : base(message) { }
+    }
+}

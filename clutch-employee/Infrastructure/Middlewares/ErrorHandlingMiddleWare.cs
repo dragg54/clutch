@@ -43,7 +43,7 @@ namespace clutch_employee.Infrastructure.Middlewares
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)statusCode;
 
-            return context.Response.WriteAsJsonAsync(new { error = message });
+            return context.Response.WriteAsJsonAsync(new { message = message, status = statusCode });
         }
     }
 }

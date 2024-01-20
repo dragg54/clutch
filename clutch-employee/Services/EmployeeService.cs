@@ -22,25 +22,15 @@ namespace clutch_employee.Services
         public async Task<Employee> CreateEmployee(PostEmployeeRequest request)
         {
             var existingEmployee = employeeDbContext.Employees.SingleOrDefault(emp => emp.EmployeeId == request.EmployeeId);
-            try
+
+            if (existingEmployee != null)
             {
-                if (existingEmployee != null)
-                {
-                    throw new DuplicateException($"Employee already exists");
-                }
-                var newEmployee = request.ToAddEmployeeRequest();
-                await employeeDbContext.Employees.AddAsync(request.ToAddEmployeeRequest());
-                await employeeDbContext.SaveChangesAsync();
-                return newEmployee;
+                throw new DuplicateException($"Employee with id {existingEmployee.EmployeeId} already exists");
             }
-            catch (DuplicateException ex)
-            {
-                throw new DuplicateException($"Employee already exists");
-            }
-            catch (Exception ex)
-            {
-                throw new HttpRequestException(ex.Message, ex, HttpStatusCode.InternalServerError);
-            }
+            var newEmployee = request.ToAddEmployeeRequest();
+            await employeeDbContext.Employees.AddAsync(request.ToAddEmployeeRequest());
+            await employeeDbContext.SaveChangesAsync();
+            return newEmployee;
         }
 
         public async Task<Employee> AmendEmployee(PutEmployeeRequest request, string id)
@@ -51,20 +41,14 @@ namespace clutch_employee.Services
                 var errMsg = $"employee with id {id} does not exist";
                 throw new NotFoundException(errMsg);
             }
-            try
-            {
-                existingEmployee.FirstName = request.FirstName;
-                existingEmployee.LastName = request.LastName;
-                existingEmployee.PositionUniqueReferenceNumber = request.PositionUniqueReferenceNumber;
-                existingEmployee.StartDate = request.StartDate;
-                existingEmployee.EmployeeStatus = (EmployeeStatus)Enum.Parse(typeof(EmployeeStatus), request.EmployeeStatus);
-                employeeDbContext.SaveChanges();
-                return existingEmployee;
-            }
-            catch (Exception ex)
-            {
-                throw new HttpRequestException(ex.Message, ex, HttpStatusCode.InternalServerError);
-            }
+            existingEmployee.FirstName = request.FirstName;
+            existingEmployee.LastName = request.LastName;
+            existingEmployee.PositionUniqueReferenceNumber = request.PositionUniqueReferenceNumber;
+            existingEmployee.StartDate = request.StartDate;
+            existingEmployee.EmployeeStatus = (EmployeeStatus)Enum.Parse(typeof(EmployeeStatus), request.EmployeeStatus);
+            employeeDbContext.SaveChanges();
+            return existingEmployee;
+
         }
 
         public async Task<List<EmployeeResource>> GetEmployeesAync()

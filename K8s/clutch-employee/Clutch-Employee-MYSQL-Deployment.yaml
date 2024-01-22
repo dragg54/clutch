@@ -16,13 +16,14 @@ spec:
       - name: mysql
         image: mysql:latest
         env:
-        - name: MYSQL_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: clutch-emp-mysql-secret
-              key: password
+        # - name: MYSQL_ROOT_PASSWORD
+        #   value: Colony77
+          # valueFrom:
+          #   secretKeyRef:
+          #     name: clutch-emp-mysql-secret
+          #     key: password
         ports:
-        - containerPort: 3307
+        - containerPort: 3306
         volumeMounts:
         - name: mysql-persistent-storage
           mountPath: /var/lib/mysql
@@ -34,7 +35,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: clutch-emp-mysql-service
+  name: clutch-emp-mysql-clusterip
 spec:
   selector:
     app: clutch-employee
@@ -43,3 +44,18 @@ spec:
       port: 3306
       targetPort: 3306
   type: ClusterIP
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: clutch-emp-mysql-loadbalancer
+spec:
+  selector:
+    app: clutch-employee
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+  type: LoadBalancer

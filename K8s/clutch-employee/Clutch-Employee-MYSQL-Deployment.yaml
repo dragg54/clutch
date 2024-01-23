@@ -6,11 +6,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: clutch-employee
+      app: mysql
   template:
     metadata:
       labels:
-        app: clutch-employee
+        app: mysql
     spec:
       containers:
       - name: mysql
@@ -38,7 +38,7 @@ metadata:
   name: clutch-emp-mysql-clusterip
 spec:
   selector:
-    app: clutch-employee
+    app: mysql
   ports:
     - protocol: TCP
       port: 3306
@@ -53,9 +53,9 @@ metadata:
   name: clutch-emp-mysql-loadbalancer
 spec:
   selector:
-    app: clutch-employee
+    app: mysql
   ports:
     - protocol: TCP
       port: 3306
       targetPort: 3306
-  type: LoadBalancer
+  type: NodePort

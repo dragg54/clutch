@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using clutch_position.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace clutch_position.Data.Contexts
 {

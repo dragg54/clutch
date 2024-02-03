@@ -15,7 +15,7 @@ namespace clutch_position.Extensions
                 PositionName = request.PositionName,
                 PositionDescription = request.PositionDescription,
                 Salary = request.Salary,
-                PositionStatus = (PositionStatus)Enum.Parse(typeof(PositionStatus), request.PositionStatus)
+                PositionStatus = PositionStatus.Empty
             };
         }
 

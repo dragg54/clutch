@@ -28,12 +28,14 @@ namespace clutch_employee.Infrastructure.Middlewares
         {
             // Customize the error response based on the exception
             var statusCode = HttpStatusCode.InternalServerError;
-            var message = "An unexpected error occurred.";
+            var exception = ex.InnerException.ToString();
+            var message = ex.InnerException.Message;
 
             // Set the status code and error message based on the exception type
             if (ex.InnerException is DuplicateException)
             {
                 statusCode = HttpStatusCode.Conflict;
+                exception = ex.InnerException.ToString();
                 message = ex.InnerException.Message;
             }
 
@@ -43,7 +45,12 @@ namespace clutch_employee.Infrastructure.Middlewares
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)statusCode;
 
-            return context.Response.WriteAsJsonAsync(new { message = message, status = statusCode });
+            return context.Response.WriteAsJsonAsync(new
+            {
+                exception= exception,
+                message = message,
+                status = statusCode
+            });
         }
     }
 }

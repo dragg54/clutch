@@ -1,4 +1,15 @@
 {
-  "ExpandedNodes": [],
+  "ExpandedNodes": [
+    "",
+    "\\clutch-employee",
+    "\\clutch-employee\\Data",
+    "\\clutch-employee\\Data\\Contexts",
+    "\\clutch-position",
+    "\\clutch-position\\Controllers",
+    "\\clutch-position\\Data",
+    "\\clutch-position\\Data\\Contexts",
+    "\\clutch-position\\Models"
+  ],
+  "SelectedNode": "\\clutch-position\\Data\\Contexts\\PositionDbContext.cs",
   "PreviewInSolutionExplorer": false
 }

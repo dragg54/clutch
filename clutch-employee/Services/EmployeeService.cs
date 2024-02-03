@@ -6,6 +6,7 @@ using clutch_employee.Models;
 using clutch_employee.Requests;
 using clutch_employee.Resource;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using System.Diagnostics;
 using System.Net;
 
@@ -27,10 +28,19 @@ namespace clutch_employee.Services
             {
                 throw new DuplicateException($"Employee with id {existingEmployee.EmployeeId} already exists");
             }
-            var newEmployee = request.ToAddEmployeeRequest();
-            await employeeDbContext.Employees.AddAsync(request.ToAddEmployeeRequest());
-            await employeeDbContext.SaveChangesAsync();
-            return newEmployee;
+            try
+            {
+                var newEmployee = request.ToAddEmployeeRequest();
+                await employeeDbContext.Employees.AddAsync(request.ToAddEmployeeRequest());
+                await employeeDbContext.SaveChangesAsync();
+                return newEmployee;
+            }
+            catch (Exception ex)
+            {
+                var errMsg = "Unable to create employee";
+                Log.Error(errMsg, ex);
+                throw new Exception(errMsg, ex);
+            }
         }
 
         public async Task<Employee> AmendEmployee(PutEmployeeRequest request, string id)
@@ -41,20 +51,38 @@ namespace clutch_employee.Services
                 var errMsg = $"employee with id {id} does not exist";
                 throw new NotFoundException(errMsg);
             }
-            existingEmployee.FirstName = request.FirstName;
-            existingEmployee.LastName = request.LastName;
-            existingEmployee.PositionUniqueReferenceNumber = request.PositionUniqueReferenceNumber;
-            existingEmployee.StartDate = request.StartDate;
-            existingEmployee.EmployeeStatus = (EmployeeStatus)Enum.Parse(typeof(EmployeeStatus), request.EmployeeStatus);
-            employeeDbContext.SaveChanges();
-            return existingEmployee;
+            try
+            {
+                existingEmployee.FirstName = request.FirstName;
+                existingEmployee.LastName = request.LastName;
+                existingEmployee.PositionUniqueReferenceNumber = request.PositionUniqueReferenceNumber;
+                existingEmployee.StartDate = request.StartDate;
+                existingEmployee.EmployeeStatus = (EmployeeStatus)Enum.Parse(typeof(EmployeeStatus), request.EmployeeStatus);
+                employeeDbContext.SaveChanges();
+                return existingEmployee;
+            }
+            catch(Exception ex)
+            {
+                var errMsg = "Unable to amend employee";
+                Log.Error(errMsg, ex);
+                throw new Exception(errMsg, ex  );
+            }
 
         }
 
         public async Task<List<EmployeeResource>> GetEmployeesAync()
         {
-            var employees = await employeeDbContext.Employees.ToListAsync();
-            return employees.ToEmployeeResources();
+            try
+            {
+                var employees = await employeeDbContext.Employees.ToListAsync();
+                return employees.ToEmployeeResources();
+            }
+            catch(Exception ex)
+            {
+                var errMsg = "Unable to get employee";
+                Log.Error(errMsg, ex);
+                throw new Exception(errMsg, ex);
+            }
         }
 
         public async Task<EmployeeResource> GetEmployeeAsync(string id)
@@ -75,6 +103,7 @@ namespace clutch_employee.Services
             }
             catch (Exception ex)
             {
+                Log.Error("Unable to get employee", ex);
                 throw new HttpRequestException(ex.Message, ex, HttpStatusCode.InternalServerError);
             }
         }

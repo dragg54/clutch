@@ -44,11 +44,22 @@ namespace clutch_employee.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(EmployeeResource))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<IActionResult> GetEmployee(string id)
         {
             var resource = await _employeeService.GetEmployeeAsync(id);
             return Ok(resource);
+        }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(EmployeeResource))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> PutEmployee(string id, [FromBody] PutEmployeeRequest request)
+        {
+            await _employeeService.AmendEmployee(request, id);
+            return Ok($"Employee with id {id} updated");
         }
     }
 }

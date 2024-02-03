@@ -20,7 +20,7 @@ namespace clutch_position.Services
             this.positionDbContext = positionDbContext ?? throw new ArgumentException();
         }
 
-        public async void CreatePosition(PostPositionRequest request)
+        public async Task CreatePosition(PostPositionRequest request)
         {
             var existingPosition = positionDbContext.Positions.SingleOrDefault(emp => emp.PositionName == request.PositionName);
 
@@ -48,7 +48,7 @@ namespace clutch_position.Services
             }
         }
 
-        public async Task<Position> AmendPosition(PutPositionRequest request, string id)
+        public async Task AmendPosition(PutPositionRequest request, string id)
         {
             var existingPosition = await positionDbContext.Positions.FirstOrDefaultAsync(x => x.Id.ToString() == id);
             if (existingPosition == null)
@@ -63,7 +63,6 @@ namespace clutch_position.Services
                 existingPosition.PositionStatus = (PositionStatus)Enum.Parse(typeof(PositionStatus), request.PositionStatus);
                 existingPosition.Salary = request.Salary;
                 positionDbContext.SaveChanges();
-                return existingPosition;
             }
             catch (Exception ex)
             {

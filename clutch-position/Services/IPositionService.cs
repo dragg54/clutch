@@ -6,7 +6,7 @@ namespace clutch_position.Services
 {
     public interface IPositionService
     {
-        Task<Position> CreatePosition(PostPositionRequest postPositionRequest);
+        void CreatePosition(PostPositionRequest postPositionRequest);
         Task<List<PositionResource>> GetPositionsAync();
         Task<PositionResource> GetPositionAsync(string id);
         Task<Position> AmendPosition(PutPositionRequest postPositionRequest, string id);

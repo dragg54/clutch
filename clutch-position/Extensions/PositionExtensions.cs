@@ -19,6 +19,17 @@ namespace clutch_position.Extensions
             };
         }
 
+        public static Position FromAddPositionRequest(this PostPositionRequest request)
+        {
+            return new Position
+            {
+                PositionName = request.PositionName,
+                PositionDescription = request.PositionDescription,
+                Salary = request.Salary,
+                PositionStatus = (PositionStatus)Enum.Parse(typeof(PositionStatus), request.PositionStatus)
+            };
+        }
+
         public static Position ToAmendPositionRequest(this PutPositionRequest request, Guid id)
         {
             return new Position

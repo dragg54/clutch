@@ -1,4 +1,5 @@
-﻿using clutch_position.Requests;
+﻿using clutch_position.Extensions;
+using clutch_position.Requests;
 using clutch_position.Resources;
 using clutch_position.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +25,8 @@ namespace clutch_position.Controllers
         public IActionResult PostPosition(PostPositionRequest request)
         {
             if (!ModelState.IsValid) return BadRequest();
-            var response = _positionService.CreatePosition(request);
+            _positionService.CreatePosition(request);
+           var response =  request.FromAddPositionRequest();
             return Ok(response);
         }
 

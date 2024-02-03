@@ -5,8 +5,6 @@ namespace clutch_position.Requests
 {
     public class PostPositionRequest
     {
-        [Key]
-        public int Id { get; set; } 
 
         [Required]
         public string PositionName { get; set; }

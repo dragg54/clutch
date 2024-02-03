@@ -20,9 +20,9 @@ namespace clutch_position.Services
             this.positionDbContext = positionDbContext ?? throw new ArgumentException();
         }
 
-        public async Task<Position> CreatePosition(PostPositionRequest request)
+        public async void CreatePosition(PostPositionRequest request)
         {
-            var existingPosition = positionDbContext.Positions.SingleOrDefault(emp => emp.Id.ToString() == request.Id.ToString());
+            var existingPosition = positionDbContext.Positions.SingleOrDefault(emp => emp.PositionName == request.PositionName);
 
             if (existingPosition != null)
             {
@@ -31,9 +31,14 @@ namespace clutch_position.Services
             try
             {
                 var newPosition = request.ToAddPositionRequest();
-                await positionDbContext.Positions.AddAsync(request.ToAddPositionRequest());
-                await positionDbContext.SaveChangesAsync();
-                return newPosition;
+                await positionDbContext.Positions.AddAsync(newPosition);
+                positionDbContext.SaveChanges();
+            }
+            catch (DuplicateException ex)
+            {
+                var errMsg = "Position already exists";
+                Log.Error(errMsg);
+                throw new Exception(errMsg, ex);
             }
             catch (Exception ex)
             {

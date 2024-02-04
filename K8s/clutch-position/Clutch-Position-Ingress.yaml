@@ -6,10 +6,10 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-    - host: clutch-position.com
+    - host: clutch.com
       http:
         paths:
-        - path: /
+        - path: /api/position
           pathType: Prefix
           backend:
             service:

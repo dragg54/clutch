@@ -6,13 +6,27 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-    - host: clutch-employee.com
+    - host: clutch.com
       http:
         paths:
-        - path: /
+        - path: /api
           pathType: Prefix
           backend:
             service:
               name: clutch-employee-clusterip-srv
               port:
                 number: 80
+        # - path: /api/Employee
+        #   pathType: Prefix
+        #   backend:
+        #     service:
+        #       name: clutch-employee-clusterip-srv
+        #       port:
+        #         number: 80
+        # - path: /api/position
+        #   pathType: Prefix
+        #   backend:
+        #     service:
+        #       name: clutch-position-clusterip-srv
+        #       port:
+        #         number: 80

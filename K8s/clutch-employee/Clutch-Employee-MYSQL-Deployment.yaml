@@ -16,12 +16,11 @@ spec:
       - name: mysql
         image: mysql:latest
         env:
-        # - name: MYSQL_ROOT_PASSWORD
-        #   value: Colony77
-          # valueFrom:
-          #   secretKeyRef:
-          #     name: clutch-emp-mysql-secret
-          #     key: password
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: clutch-emp-mysql-secret
+              key: password
         ports:
         - containerPort: 3306
         volumeMounts:

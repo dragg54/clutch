@@ -9,24 +9,17 @@ spec:
     - host: clutch.com
       http:
         paths:
-        - path: /api
+        - path: /api/employee/*
           pathType: Prefix
           backend:
             service:
               name: clutch-employee-clusterip-srv
               port:
                 number: 80
-        # - path: /api/Employee
-        #   pathType: Prefix
-        #   backend:
-        #     service:
-        #       name: clutch-employee-clusterip-srv
-        #       port:
-        #         number: 80
-        # - path: /api/position
-        #   pathType: Prefix
-        #   backend:
-        #     service:
-        #       name: clutch-position-clusterip-srv
-        #       port:
-        #         number: 80
+        - path: /api/position/*
+          pathType: Prefix
+          backend:
+            service:
+              name: clutch-position-clusterip-srv
+              port:
+                number: 80

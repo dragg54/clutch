@@ -1,4 +1,4 @@
-﻿using clutch_employee.Models;
+﻿using clutch_employee.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 

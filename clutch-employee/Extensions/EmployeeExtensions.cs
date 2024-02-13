@@ -1,5 +1,5 @@
 ﻿using clutch_employee.Data;
-using clutch_employee.Models;
+using clutch_employee.Entities;
 using clutch_employee.Requests;
 using clutch_employee.Resource;
 
@@ -11,14 +11,27 @@ namespace clutch_employee.Extensions
         {
             return new Employee
             {
-                Id = request.Id,
                 EmployeeId = request.EmployeeId,
                 PositionUniqueReferenceNumber = request.PositionUniqueReferenceNumber,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Age = request.Age,
                 StartDate = request.StartDate,
-                EmployeeStatus = (EmployeeStatus)Enum.Parse(typeof(EmployeeStatus), request.EmployeeStatus)
+                EmployeeStatus = EmployeeStatus.Active
+            };
+        }
+
+         public static Employee AddEmployeeRequest(this PostEmployeeRequest request)
+        {
+            return new Employee
+            {
+                EmployeeId = request.EmployeeId,
+                PositionUniqueReferenceNumber = request.PositionUniqueReferenceNumber,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                Age = request.Age,
+                StartDate = request.StartDate,
+                EmployeeStatus = EmployeeStatus.Active
             };
         }
 
@@ -46,7 +59,7 @@ namespace clutch_employee.Extensions
                 LastName = emp.LastName,
                 Age = emp.Age,
                 StartDate = emp.StartDate,
-                EmployeeStatus = (EmployeeStatus)Enum.Parse(typeof(EmployeeStatus), emp.EmployeeStatus.ToString())
+                EmployeeStatus = emp.EmployeeStatus.ToString()
             }).ToList();
         }
 
@@ -61,7 +74,7 @@ namespace clutch_employee.Extensions
                 LastName = employee.LastName,
                 Age = employee.Age,
                 StartDate = employee.StartDate,
-                EmployeeStatus = (EmployeeStatus)Enum.Parse(typeof(EmployeeStatus), employee.EmployeeStatus.ToString())
+                EmployeeStatus = employee.EmployeeStatus.ToString()
             };
         }
     }

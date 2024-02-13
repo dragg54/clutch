@@ -2,7 +2,7 @@
 using clutch_employee.Data.Contexts;
 using clutch_employee.Exceptions;
 using clutch_employee.Extensions;
-using clutch_employee.Models;
+using clutch_employee.Entities;
 using clutch_employee.Requests;
 using clutch_employee.Resource;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +20,7 @@ namespace clutch_employee.Services
             this.employeeDbContext = employeeDbContext ?? throw new ArgumentException();
         }
 
-        public async Task<Employee> CreateEmployee(PostEmployeeRequest request)
+        public async Task CreateEmployee(PostEmployeeRequest request)
         {
             var existingEmployee = employeeDbContext.Employees.SingleOrDefault(emp => emp.EmployeeId == request.EmployeeId);
 
@@ -33,7 +33,6 @@ namespace clutch_employee.Services
                 var newEmployee = request.ToAddEmployeeRequest();
                 await employeeDbContext.Employees.AddAsync(request.ToAddEmployeeRequest());
                 await employeeDbContext.SaveChangesAsync();
-                return newEmployee;
             }
             catch (Exception ex)
             {
@@ -43,7 +42,7 @@ namespace clutch_employee.Services
             }
         }
 
-        public async Task<Employee> AmendEmployee(PutEmployeeRequest request, string id)
+       public async Task AmendEmployee(PutEmployeeRequest request, string id)
         {
             var existingEmployee = await employeeDbContext.Employees.FirstOrDefaultAsync(x => x.Id.ToString() == id);
             if (existingEmployee == null)
@@ -59,7 +58,6 @@ namespace clutch_employee.Services
                 existingEmployee.StartDate = request.StartDate;
                 existingEmployee.EmployeeStatus = (EmployeeStatus)Enum.Parse(typeof(EmployeeStatus), request.EmployeeStatus);
                 employeeDbContext.SaveChanges();
-                return existingEmployee;
             }
             catch(Exception ex)
             {

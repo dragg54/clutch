@@ -5,6 +5,8 @@ VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "clutch-employee", "clutch-employee.csproj", "{012C206F-33CF-41CB-BE0A-EDB009DA1C2A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clutch.Employee.Position", "Clutch.Employee.Position\Clutch.Employee.Position.csproj", "{706A7D4B-4BA6-485A-A8A0-7475B1BF5ED3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{012C206F-33CF-41CB-BE0A-EDB009DA1C2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{012C206F-33CF-41CB-BE0A-EDB009DA1C2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{012C206F-33CF-41CB-BE0A-EDB009DA1C2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{706A7D4B-4BA6-485A-A8A0-7475B1BF5ED3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{706A7D4B-4BA6-485A-A8A0-7475B1BF5ED3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{706A7D4B-4BA6-485A-A8A0-7475B1BF5ED3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{706A7D4B-4BA6-485A-A8A0-7475B1BF5ED3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

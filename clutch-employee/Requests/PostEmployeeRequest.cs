@@ -5,8 +5,6 @@ namespace clutch_employee.Requests
 {
     public class PostEmployeeRequest
     {
-        public Guid Id { get => Guid.NewGuid(); }
-
         [Required]
         public string EmployeeId { get; set; }
 
@@ -24,8 +22,5 @@ namespace clutch_employee.Requests
 
         [Required]
         public DateTime StartDate { get; set; }
-
-        [Required]
-        public string EmployeeStatus { get; set; }
     }
 }

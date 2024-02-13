@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using clutch_employee.Data.Contexts;
 
@@ -10,53 +11,46 @@ using clutch_employee.Data.Contexts;
 namespace clutch_employee.Migrations
 {
     [DbContext(typeof(EmployeeDbContext))]
-    partial class EmployeeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240212191301_MyMigrations")]
+    partial class MyMigrations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "6.0.26")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("clutch_employee.Entities.Employee", b =>
+            modelBuilder.Entity("clutch_employee.Models.Employee", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("id");
+                        .HasColumnType("char(36)");
 
                     b.Property<int>("Age")
-                        .HasColumnType("int")
-                        .HasColumnName("age");
+                        .HasColumnType("int");
 
                     b.Property<string>("EmployeeId")
                         .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasColumnName("employeeId");
+                        .HasColumnType("longtext");
 
                     b.Property<int>("EmployeeStatus")
-                        .HasColumnType("int")
-                        .HasColumnName("employeeStatus");
+                        .HasColumnType("int");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasColumnName("firstName");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasColumnName("lastName");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("PositionUniqueReferenceNumber")
                         .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasColumnName("positionUniqueReferenceNumber");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("startDate");
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 

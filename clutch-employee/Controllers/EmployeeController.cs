@@ -1,6 +1,8 @@
-﻿using clutch_employee.Exceptions;
+﻿using System.Net;
+using clutch_employee.Exceptions;
 using clutch_employee.Requests;
 using clutch_employee.Resource;
+using clutch_employee.Responses;
 using clutch_employee.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,7 +27,12 @@ namespace clutch_employee.Controllers
         public IActionResult PostEmployee(PostEmployeeRequest request)
         {
             if (!ModelState.IsValid) return BadRequest();
-            var response = _employeeService.CreateEmployee(request);
+            _employeeService.CreateEmployee(request);
+            var response = new EmployeeActionResponse(){
+                StatusCode = System.Net.HttpStatusCode.Created,
+                Message = "Employee created",
+                Data = request
+            };
             return Ok(response);
         }
 
@@ -59,7 +66,13 @@ namespace clutch_employee.Controllers
         public async Task<IActionResult> PutEmployee(string id, [FromBody] PutEmployeeRequest request)
         {
             await _employeeService.AmendEmployee(request, id);
-            return Ok($"Employee with id {id} updated");
+            var message = $"Employee with id {id} updated";
+            var response = new EmployeeActionResponse(){
+                StatusCode = HttpStatusCode.OK,
+                Message = message,
+                Data = request
+            };
+            return Ok(response);
         }
     }
 }

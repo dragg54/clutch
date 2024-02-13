@@ -7,7 +7,7 @@ namespace clutch_employee.Resource
     public class EmployeeResource
     {
         [JsonProperty("id")]
-        public Guid Id { get; set; }
+        public long Id {get; set;}
 
         [JsonProperty("employeeId")]
         public string EmployeeId { get; set; }
@@ -28,6 +28,6 @@ namespace clutch_employee.Resource
         public DateTime StartDate { get; set; }
 
         [JsonProperty("employeeStatus")]
-        public EmployeeStatus EmployeeStatus { get; set; }
+        public string EmployeeStatus { get; set; }
     }
 }

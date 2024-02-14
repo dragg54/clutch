@@ -9,6 +9,8 @@ using clutch_employee.Data.Contexts;
 using clutch_employee.Services;
 using Serilog;
 using clutch_employee.Infrastructure.Middlewares;
+using System.Numerics;
+using Clutch.Employee.Position.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +27,9 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateLogger();
 
+//Inject services    
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddHttpClient<IPositionClient, PositionClient>();
 
 builder.Services.AddDbContext<EmployeeDbContext>(options =>
 {
@@ -41,7 +45,6 @@ builder.Services.AddDbContext<EmployeeDbContext>(options =>
         options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
     }
 });
-
 var app = builder.Build();
 
 app.UseSwagger();

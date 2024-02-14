@@ -9,20 +9,24 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 using System.Diagnostics;
 using System.Net;
+using Clutch.Employee.Position.Client;
 
 namespace clutch_employee.Services
 {
     public class EmployeeService : IEmployeeService
     {
         private readonly EmployeeDbContext employeeDbContext;
-        public EmployeeService(EmployeeDbContext employeeDbContext)
+        private readonly IPositionClient positionClient;
+        public EmployeeService(EmployeeDbContext employeeDbContext, IPositionClient positionClient)
         {
             this.employeeDbContext = employeeDbContext ?? throw new ArgumentException();
+            this.positionClient = positionClient ?? throw new ArgumentNullException();
         }
 
         public async Task CreateEmployee(PostEmployeeRequest request)
         {
             var existingEmployee = employeeDbContext.Employees.SingleOrDefault(emp => emp.EmployeeId == request.EmployeeId);
+            var response = await positionClient.GetEmployeePositionResource(request.PositionUniqueReferenceNumber);
 
             if (existingEmployee != null)
             {
@@ -30,9 +34,12 @@ namespace clutch_employee.Services
             }
             try
             {
-                var newEmployee = request.ToAddEmployeeRequest();
-                await employeeDbContext.Employees.AddAsync(request.ToAddEmployeeRequest());
-                await employeeDbContext.SaveChangesAsync();
+                if(response.StatusCode == HttpStatusCode.OK)
+                {
+                    var newEmployee = request.ToAddEmployeeRequest();
+                    await employeeDbContext.Employees.AddAsync(request.ToAddEmployeeRequest());
+                    await employeeDbContext.SaveChangesAsync();
+                }
             }
             catch (Exception ex)
             {

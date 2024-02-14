@@ -8,6 +8,6 @@ namespace Clutch.Employee.Position.Client
 {
     public interface IPositionClient
     {
-        Task<EmployeePositionResponse> GetEmployeePositionResource(long id);
+        Task<EmployeePositionResponse> GetEmployeePositionResource(string id);
     }
 }

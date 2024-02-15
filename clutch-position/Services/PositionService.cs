@@ -95,7 +95,7 @@ namespace clutch_position.Services
                 var position = await positionDbContext.Positions.FirstOrDefaultAsync(emp => emp.Id.ToString() == id);
                 if (position == null)
                 {
-                    var errMsg = $"Empployee with id {id} does not exist";
+                    var errMsg = $"Position with id {id} does not exist";
                     throw new NotFoundException(errMsg);
                 }
                 return position.ToPositionResource();

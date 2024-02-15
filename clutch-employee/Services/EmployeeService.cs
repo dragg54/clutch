@@ -25,21 +25,31 @@ namespace clutch_employee.Services
 
         public async Task CreateEmployee(PostEmployeeRequest request)
         {
-            var existingEmployee = employeeDbContext.Employees.SingleOrDefault(emp => emp.EmployeeId == request.EmployeeId);
-            var response = await positionClient.GetEmployeePositionResource(request.PositionUniqueReferenceNumber);
-
-            if (existingEmployee != null)
-            {
-                throw new DuplicateException($"Employee with id {existingEmployee.EmployeeId} already exists");
-            }
             try
             {
-                if(response.StatusCode == HttpStatusCode.OK)
+                var existingEmployee = employeeDbContext.Employees.SingleOrDefault(emp => emp.EmployeeId == request.EmployeeId);
+                var response = await positionClient.GetEmployeePositionResource(request.PositionUniqueReferenceNumber);
+
+                if (existingEmployee != null)
+                {
+                    throw new DuplicateException($"Employee with id {existingEmployee.EmployeeId} already exists");
+                }
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
                     var newEmployee = request.ToAddEmployeeRequest();
                     await employeeDbContext.Employees.AddAsync(request.ToAddEmployeeRequest());
                     await employeeDbContext.SaveChangesAsync();
                 }
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+
+                    throw new InvalidRequestException($"Position with {request.PositionUniqueReferenceNumber} not found");
+                }
+            }
+            catch (InvalidRequestException ex)
+            {
+                Log.Error(ex.Message);
+                throw new HttpRequestException(ex.Message, ex, HttpStatusCode.BadRequest);
             }
             catch (Exception ex)
             {
@@ -49,7 +59,7 @@ namespace clutch_employee.Services
             }
         }
 
-       public async Task AmendEmployee(PutEmployeeRequest request, string id)
+        public async Task AmendEmployee(PutEmployeeRequest request, string id)
         {
             var existingEmployee = await employeeDbContext.Employees.FirstOrDefaultAsync(x => x.Id.ToString() == id);
             if (existingEmployee == null)
@@ -66,11 +76,11 @@ namespace clutch_employee.Services
                 existingEmployee.EmployeeStatus = (EmployeeStatus)Enum.Parse(typeof(EmployeeStatus), request.EmployeeStatus);
                 employeeDbContext.SaveChanges();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 var errMsg = "Unable to amend employee";
                 Log.Error(errMsg, ex);
-                throw new Exception(errMsg, ex  );
+                throw new Exception(errMsg, ex);
             }
 
         }
@@ -82,7 +92,7 @@ namespace clutch_employee.Services
                 var employees = await employeeDbContext.Employees.ToListAsync();
                 return employees.ToEmployeeResources();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 var errMsg = "Unable to get employee";
                 Log.Error(errMsg, ex);

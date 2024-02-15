@@ -31,16 +31,15 @@ namespace Clutch.Employee.Position.Client
                     var employeePositionResource = JsonConvert.DeserializeObject<EmployeePositionResponse>(jsonResponse);
                     response.StatusCode = System.Net.HttpStatusCode.OK;
                     response.Data = employeePositionResource;
-                    Console.WriteLine("Response:");
-                    Console.WriteLine(response);
                     return response;
                 }
                 else{
                     response.StatusCode = httpResponseMessage.StatusCode;
+                    response.Message = $"Position with {id} not found";
                     return response;
                 }
             }
-            catch (HttpRequestException ex)
+            catch(Exception ex)
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
                 return response;

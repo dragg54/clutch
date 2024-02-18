@@ -1,4 +1,4 @@
-﻿using clutch_position.Models;
+﻿using clutch_position.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 

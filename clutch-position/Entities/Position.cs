@@ -1,7 +1,7 @@
 ﻿using clutch_position.Data;
 using System.ComponentModel.DataAnnotations;
 
-namespace clutch_position.Models
+namespace clutch_position.Entities
 {
     public class Position
     {

@@ -1,5 +1,5 @@
 ﻿using clutch_position.Data;
-using clutch_position.Models;
+using clutch_position.Entities;
 using clutch_position.Requests;
 using clutch_position.Resources;
 using Org.BouncyCastle.Asn1.Ocsp;

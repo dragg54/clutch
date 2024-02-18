@@ -21,7 +21,7 @@ namespace clutch_position.Migrations
                 .HasAnnotation("ProductVersion", "6.0.26")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("clutch_position.Models.Position", b =>
+            modelBuilder.Entity("clutch_position.Entities.Position", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()

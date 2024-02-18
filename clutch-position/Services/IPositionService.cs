@@ -1,4 +1,4 @@
-﻿using clutch_position.Models;
+﻿using clutch_position.Entities;
 using clutch_position.Requests;
 using clutch_position.Resources;
 

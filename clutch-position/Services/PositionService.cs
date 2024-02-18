@@ -2,7 +2,7 @@
 using clutch_position.Data.Contexts;
 using clutch_position.Exceptions;
 using clutch_position.Extensions;
-using clutch_position.Models;
+using clutch_position.Entities;
 using clutch_position.Requests;
 using clutch_position.Resources;
 using Microsoft.EntityFrameworkCore;

@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using clutch_employee.Data.Contexts;
 using clutch_employee.Services;
 using Serilog;
-using clutch_employee.Infrastructure.Middlewares;
 using System.Numerics;
 using Clutch.Employee.Position.Client;
+using clutch_employee.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 

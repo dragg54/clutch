@@ -1,7 +1,7 @@
 ﻿using clutch_employee.Exceptions;
 using System.Net;
 
-namespace clutch_employee.Infrastructure.Middlewares
+namespace clutch_employee.Infrastructure
 {
     public class ErrorHandlingMiddleware
     {
@@ -18,13 +18,13 @@ namespace clutch_employee.Infrastructure.Middlewares
             {
                 await _next(context);
             }
-            catch (Exception ex)
+            catch (HttpRequestException ex)
             {
                 await HandleExceptionAsync(context, ex);
             }
         }
 
-        private static Task HandleExceptionAsync(HttpContext context, Exception ex)
+        private static Task HandleExceptionAsync(HttpContext context, HttpRequestException ex)
         {
             // Customize the error response based on the exception
             var statusCode = HttpStatusCode.InternalServerError;
@@ -38,6 +38,12 @@ namespace clutch_employee.Infrastructure.Middlewares
                 exception = ex.InnerException.ToString();
                 message = ex.InnerException.Message;
             }
+            if (ex.StatusCode != null)
+            {
+                statusCode = (HttpStatusCode)ex.StatusCode;
+                exception = ex.InnerException.ToString();
+                message = ex.InnerException.Message;
+            }
 
             // Log the exception if needed
 
@@ -47,7 +53,7 @@ namespace clutch_employee.Infrastructure.Middlewares
 
             return context.Response.WriteAsJsonAsync(new
             {
-                exception= exception,
+                exception = exception,
                 message = message,
                 status = statusCode
             });

@@ -24,11 +24,11 @@ namespace clutch_employee.Controllers
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 
-        public IActionResult PostEmployee(PostEmployeeRequest request)
+        public async Task<IActionResult> PostEmployee(PostEmployeeRequest request)
         {
             if (!ModelState.IsValid) return BadRequest();
-            _employeeService.CreateEmployee(request);
-            var response = new EmployeeActionResponse(){
+            await _employeeService.CreateEmployee(request);
+             var response = new EmployeeActionResponse(){
                 StatusCode = System.Net.HttpStatusCode.Created,
                 Message = "Employee created",
                 Data = request

@@ -43,19 +43,18 @@ namespace clutch_employee.Services
                 if (response.StatusCode == HttpStatusCode.NotFound)
                 {
 
-                    throw new InvalidRequestException($"Position with {request.PositionUniqueReferenceNumber} not found");
+                    throw new NotFoundException($"Position with {request.PositionUniqueReferenceNumber} not found");
                 }
             }
-            catch (InvalidRequestException ex)
+            catch (NotFoundException ex)
             {
-                Log.Error(ex.Message);
                 throw new HttpRequestException(ex.Message, ex, HttpStatusCode.BadRequest);
             }
             catch (Exception ex)
             {
                 var errMsg = "Unable to create employee";
                 Log.Error(errMsg, ex);
-                throw new Exception(errMsg, ex);
+                throw new HttpRequestException(errMsg, ex);
             }
         }
 

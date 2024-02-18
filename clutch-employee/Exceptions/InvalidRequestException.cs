@@ -5,6 +5,6 @@
 
         public InvalidRequestException() { }    
 
-        public InvalidRequestException(string message) : base(message) { }
+        public InvalidRequestException(string msg) : base(msg) { }
     }
 }

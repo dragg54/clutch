@@ -16,6 +16,7 @@ namespace clutch_employee.Extensions
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Age = request.Age,
+                Email = request.Email,
                 StartDate = request.StartDate,
                 EmployeeStatus = EmployeeStatus.Active
             };
@@ -29,6 +30,7 @@ namespace clutch_employee.Extensions
                 PositionUniqueReferenceNumber = request.PositionUniqueReferenceNumber,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
+                Email = request.Email,
                 Age = request.Age,
                 StartDate = request.StartDate,
                 EmployeeStatus = EmployeeStatus.Active
@@ -42,6 +44,7 @@ namespace clutch_employee.Extensions
                 PositionUniqueReferenceNumber = request.PositionUniqueReferenceNumber,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
+                Email = request.Email,
                 Age = request.Age,
                 StartDate = request.StartDate,
                 EmployeeStatus = (EmployeeStatus)Enum.Parse(typeof(EmployeeStatus), request.EmployeeStatus)
@@ -57,6 +60,7 @@ namespace clutch_employee.Extensions
                 PositionId = emp.PositionUniqueReferenceNumber,
                 FirstName = emp.FirstName,
                 LastName = emp.LastName,
+                Email = emp.Email,
                 Age = emp.Age,
                 StartDate = emp.StartDate,
                 EmployeeStatus = emp.EmployeeStatus.ToString()
@@ -72,6 +76,7 @@ namespace clutch_employee.Extensions
                 PositionId = employee.PositionUniqueReferenceNumber,
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
+                Email = employee.Email,
                 Age = employee.Age,
                 StartDate = employee.StartDate,
                 EmployeeStatus = employee.EmployeeStatus.ToString()

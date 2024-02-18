@@ -13,6 +13,10 @@ namespace clutch_employee.Requests
         [Required]
         public string LastName { get; set; }
 
+
+        [Required]
+        public string Email { get; set; }
+
         [Required]
         public int Age { get; set; }
 

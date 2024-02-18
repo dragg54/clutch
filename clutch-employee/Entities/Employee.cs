@@ -32,6 +32,10 @@ namespace clutch_employee.Entities
         public int Age { get; set; }
 
         [Required]
+        [Column("email")]
+        public string Email { get; set; }
+
+        [Required]
         [Column("startDate")]
         public DateTime StartDate { get; set; }
 

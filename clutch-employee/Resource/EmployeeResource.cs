@@ -21,6 +21,10 @@ namespace clutch_employee.Resource
         [JsonProperty("lastName")]
         public string LastName { get; set; }
 
+
+        [JsonProperty("email")]
+        public string Email { get; set; }
+
         [JsonProperty("age")]
         public int Age { get; set; }
 

@@ -10,7 +10,9 @@ using Serilog;
 using System.Diagnostics;
 using System.Net;
 using Clutch.Employee.Position.Client;
-using Clutch.Employee.Position;
+using Clutch.Employee.Position.Response;
+using clutch_employee.Position.Entities;
+using clutch_employee.Position.Enums;
 
 namespace clutch_employee.Services
 {
@@ -46,11 +48,20 @@ namespace clutch_employee.Services
 
                     throw new NotFoundException($"Position with {request.PositionUniqueReferenceNumber} not found");
                 }
-
+                if(((EmployeePosition)positionResponse.Data).PositionStatus == EmployeePositionStatus.Filled.ToString())
+                {
+                    var message = $"Position with id {request.PositionUniqueReferenceNumber} is not empty";
+                    throw new InvalidOperationException(message);
+                }
             }
             catch (NotFoundException ex)
             {
                 throw new HttpRequestException(ex.Message, ex, HttpStatusCode.BadRequest);
+            }
+            catch(InvalidOperationException ex)
+            {
+                throw new HttpRequestException(ex.Message, ex, HttpStatusCode.BadRequest);
+
             }
             catch (Exception ex)
             {
@@ -62,26 +73,51 @@ namespace clutch_employee.Services
 
         public async Task AmendEmployee(PutEmployeeRequest request, string id)
         {
-            var existingEmployee = await employeeDbContext.Employees.FirstOrDefaultAsync(x => x.Id.ToString() == id);
-            if (existingEmployee == null)
-            {
-                var errMsg = $"employee with id {id} does not exist";
-                throw new NotFoundException(errMsg);
-            }
             try
             {
-                existingEmployee.FirstName = request.FirstName;
-                existingEmployee.LastName = request.LastName;
-                existingEmployee.PositionUniqueReferenceNumber = request.PositionUniqueReferenceNumber;
-                existingEmployee.StartDate = request.StartDate;
-                existingEmployee.EmployeeStatus = (EmployeeStatus)Enum.Parse(typeof(EmployeeStatus), request.EmployeeStatus);
-                employeeDbContext.SaveChanges();
+                var existingEmployee = await employeeDbContext.Employees.FirstOrDefaultAsync(x => x.Id.ToString() == id);
+                EmployeePositionResponse positionResponse = await positionClient.GetEmployeePositionResource(request.PositionUniqueReferenceNumber);
+
+                if (existingEmployee != null)
+                {
+                    throw new DuplicateException($"Employee with id {existingEmployee.EmployeeId} already exists");
+                }
+                if (positionResponse.StatusCode == HttpStatusCode.OK)
+                {
+                    var amendedEmployee = request.ToAmendEmployeeRequest(existingEmployee.EmployeeId, existingEmployee.StartDate);
+                    await employeeDbContext.SaveChangesAsync();
+                }
+                if (positionResponse.StatusCode == HttpStatusCode.NotFound)
+                {
+
+                    throw new NotFoundException($"Position with {request.PositionUniqueReferenceNumber} not found");
+                }
+                if (((EmployeePosition)positionResponse.Data).PositionStatus == EmployeePositionStatus.Filled.ToString())
+                {
+                    var message = $"Position with id {request.PositionUniqueReferenceNumber} is not empty";
+                    throw new InvalidOperationException(message);
+                }
+                if (existingEmployee == null)
+                {
+                    var errMsg = $"employee with id {id} does not exist";
+                    throw new NotFoundException(errMsg);
+                }
+               
+            }
+            catch (NotFoundException ex)
+            {
+                throw new HttpRequestException(ex.Message, ex, HttpStatusCode.BadRequest);
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new HttpRequestException(ex.Message, ex, HttpStatusCode.BadRequest);
+
             }
             catch (Exception ex)
             {
-                var errMsg = "Unable to amend employee";
+                var errMsg = "Unable to create employee";
                 Log.Error(errMsg, ex);
-                throw new Exception(errMsg, ex);
+                throw new HttpRequestException(errMsg, ex);
             }
 
         }

@@ -1,6 +1,8 @@
-﻿namespace clutch_employee.Employee.Position.Enums
+﻿namespace clutch_employee.Position.Enums
 {
-    public class EmployeePositionStatus
+    public enum EmployeePositionStatus
     {
+        Empty,
+        Filled
     }
 }

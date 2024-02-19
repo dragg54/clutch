@@ -2,7 +2,6 @@
 using clutch_employee.Entities;
 using clutch_employee.Requests;
 using clutch_employee.Resource;
-
 namespace clutch_employee.Extensions
 {
     public static class EmployeeExtensions
@@ -37,16 +36,17 @@ namespace clutch_employee.Extensions
             };
         }
 
-        public static Employee ToAmendEmployeeRequest(this PutEmployeeRequest request, Guid id)
+        public static Employee ToAmendEmployeeRequest(this PutEmployeeRequest request, string empId, DateTime startDate)
         {
             return new Employee
             {
+                EmployeeId = empId,
                 PositionUniqueReferenceNumber = request.PositionUniqueReferenceNumber,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Email = request.Email,
                 Age = request.Age,
-                StartDate = request.StartDate,
+                StartDate = startDate,
                 EmployeeStatus = (EmployeeStatus)Enum.Parse(typeof(EmployeeStatus), request.EmployeeStatus)
             };
         }

@@ -38,9 +38,9 @@ namespace clutch_position.Infrastructure
                 exception = ex.InnerException.ToString();
                 message = ex.InnerException.Message;
             }
-            if(ex.StatusCode == HttpStatusCode.NotFound)
+            if(ex.StatusCode != null)
             {
-                statusCode= HttpStatusCode.NotFound;
+                statusCode= (HttpStatusCode)ex.StatusCode;
                 exception = ex.InnerException.ToString();
                 message = ex.InnerException.Message;
             }

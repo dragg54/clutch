@@ -10,6 +10,7 @@ using Serilog;
 using System.Diagnostics;
 using System.Net;
 using Clutch.Employee.Position.Client;
+using Clutch.Employee.Position;
 
 namespace clutch_employee.Services
 {
@@ -28,23 +29,24 @@ namespace clutch_employee.Services
             try
             {
                 var existingEmployee = employeeDbContext.Employees.SingleOrDefault(emp => emp.EmployeeId == request.EmployeeId);
-                var response = await positionClient.GetEmployeePositionResource(request.PositionUniqueReferenceNumber);
+                EmployeePositionResponse positionResponse = await positionClient.GetEmployeePositionResource(request.PositionUniqueReferenceNumber);
 
                 if (existingEmployee != null)
                 {
                     throw new DuplicateException($"Employee with id {existingEmployee.EmployeeId} already exists");
                 }
-                if (response.StatusCode == HttpStatusCode.OK)
+                if (positionResponse.StatusCode == HttpStatusCode.OK)
                 {
                     var newEmployee = request.ToAddEmployeeRequest();
                     await employeeDbContext.Employees.AddAsync(request.ToAddEmployeeRequest());
                     await employeeDbContext.SaveChangesAsync();
                 }
-                if (response.StatusCode == HttpStatusCode.NotFound)
+                if (positionResponse.StatusCode == HttpStatusCode.NotFound)
                 {
 
                     throw new NotFoundException($"Position with {request.PositionUniqueReferenceNumber} not found");
                 }
+
             }
             catch (NotFoundException ex)
             {

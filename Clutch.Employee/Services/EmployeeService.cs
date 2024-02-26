@@ -37,12 +37,6 @@ namespace clutch_employee.Services
                 {
                     throw new DuplicateException($"Employee with id {existingEmployee.EmployeeId} already exists");
                 }
-                if (positionResponse.StatusCode == HttpStatusCode.OK)
-                {
-                    var newEmployee = request.ToAddEmployeeRequest();
-                    await employeeDbContext.Employees.AddAsync(request.ToAddEmployeeRequest());
-                    await employeeDbContext.SaveChangesAsync();
-                }
                 if (positionResponse.StatusCode == HttpStatusCode.NotFound)
                 {
 
@@ -52,6 +46,12 @@ namespace clutch_employee.Services
                 {
                     var message = $"Position with id {request.PositionUniqueReferenceNumber} is not empty";
                     throw new InvalidOperationException(message);
+                }
+                if (positionResponse.StatusCode == HttpStatusCode.OK)
+                {
+                    var newEmployee = request.ToAddEmployeeRequest();
+                    await employeeDbContext.Employees.AddAsync(request.ToAddEmployeeRequest());
+                    await employeeDbContext.SaveChangesAsync();
                 }
             }
             catch (NotFoundException ex)
@@ -77,15 +77,10 @@ namespace clutch_employee.Services
             {
                 var existingEmployee = await employeeDbContext.Employees.FirstOrDefaultAsync(x => x.Id.ToString() == id);
                 EmployeePositionResponse positionResponse = await positionClient.GetEmployeePositionResource(request.PositionUniqueReferenceNumber);
-
-                if (existingEmployee != null)
+                if (existingEmployee == null)
                 {
-                    throw new DuplicateException($"Employee with id {existingEmployee.EmployeeId} already exists");
-                }
-                if (positionResponse.StatusCode == HttpStatusCode.OK)
-                {
-                    var amendedEmployee = request.ToAmendEmployeeRequest(existingEmployee.EmployeeId, existingEmployee.StartDate);
-                    await employeeDbContext.SaveChangesAsync();
+                    var errMsg = $"employee with id {id} does not exist";
+                    throw new NotFoundException(errMsg);
                 }
                 if (positionResponse.StatusCode == HttpStatusCode.NotFound)
                 {
@@ -97,10 +92,10 @@ namespace clutch_employee.Services
                     var message = $"Position with id {request.PositionUniqueReferenceNumber} is not empty";
                     throw new InvalidOperationException(message);
                 }
-                if (existingEmployee == null)
+                if (positionResponse.StatusCode == HttpStatusCode.OK)
                 {
-                    var errMsg = $"employee with id {id} does not exist";
-                    throw new NotFoundException(errMsg);
+                    var amendedEmployee = request.ToAmendEmployeeRequest(existingEmployee.EmployeeId, existingEmployee.StartDate);
+                    await employeeDbContext.SaveChangesAsync();
                 }
                
             }

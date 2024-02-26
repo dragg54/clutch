@@ -9,6 +9,9 @@ using System.Numerics;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using clutch_identity.Data.Contexts;
+using Microsoft.EntityFrameworkCore;
+using clutch_identity.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,10 +52,9 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 //Inject services    
-builder.Services.AddScoped<IdentityService, IdentityService>();
-builder.Services.AddHttpClient<IPositionClient, PositionClient>();
+builder.Services.AddScoped<UserService, IUserService>();
 
-builder.Services.AddDbContext<IdentityDbContext>(options =>
+builder.Services.AddDbContext<UserDBContext>(options =>
 {
     Log.Information($"Using {builder.Environment.EnvironmentName} DB");
     var connectionString = builder.Configuration.GetConnectionString("DbConnection");
@@ -75,13 +77,13 @@ app.UseAuthorization();
 app.MapControllers();
 //app.UseMiddleware<ErrorHandlingMiddleware>();
 
-//if (builder.Environment.IsProduction())
-//{
-//    Log.Information("DI for context in production");
-//    var db = app.Services.GetRequiredService<IdentityDbContext>();
-//    await db.Database.MigrateAsync();
+if (builder.Environment.IsProduction())
+{
+    Log.Information("DI for context in production");
+    var db = app.Services.GetRequiredService<UserDBContext>();
+    await db.Database.MigrateAsync();
 
-//}
+}
 
 
 app.Run();

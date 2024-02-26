@@ -11,6 +11,6 @@ namespace clutch_identity.Data.Contexts
         {
         }
 
-        public DbSet<Users> Employees { get; set; }
+        public DbSet<Users> Users { get; set; }
     }
 }

@@ -2,21 +2,21 @@
 
 namespace clutch_identity.Exceptions
 {
-    public class DuplicateUserException : Exception
+    public class DuplicateException : Exception
     {
-        public DuplicateUserException()
+        public DuplicateException()
         {
         }
 
-        public DuplicateUserException(string message) : base(message)
+        public DuplicateException(string message) : base(message)
         {
         }
 
-        public DuplicateUserException(string message, Exception innerException) : base(message, innerException)
+        public DuplicateException(string message, Exception innerException) : base(message, innerException)
         {
         }
 
-        protected DuplicateUserException(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected DuplicateException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
     }

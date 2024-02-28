@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using Serilog;
 
 namespace clutch_identity.Services
 {
@@ -24,23 +25,27 @@ namespace clutch_identity.Services
         {
             try
             {
-                var existingUser = userDbContext.Users.SingleOrDefaultAsync(
+                var existingUser = await userDbContext.Users.SingleOrDefaultAsync(
                 user => user.Email == request.Email
                 );
                 if (existingUser is not null)
                 {
                     var msg = "User already exists";
+                    Log.Error(msg);
                     throw new DuplicateException(msg);
                 }
                 var newUser = request.ToAddUserRequest();
                 userDbContext.SaveChanges();
+                Log.Information($"user with email {request.Email} created");
             }
             catch (DuplicateException ex)
             {
+                Log.Error(ex.Message);
                 throw new HttpRequestException(ex.Message, ex, HttpStatusCode.Conflict);
             }
             catch (Exception ex)
             {
+                Log.Error(ex.Message);
                 throw new HttpRequestException(ex.Message, ex, HttpStatusCode.InternalServerError);
             }
         }
@@ -53,16 +58,20 @@ namespace clutch_identity.Services
                 if (user is null)
                 {
                     var msg = $"User with id {id} does not exist";
+                    Log.Error(msg);
                     throw new NotFoundException(msg);
                 }
+                Log.Information("Resource found for users");
                 return user.ToUserResource();
             }
             catch(NotFoundException ex)
             {
+                Log.Error(ex.Message);
                 throw new HttpRequestException(ex.Message, ex, HttpStatusCode.NotFound);
             }
             catch (Exception ex)
             {
+                Log.Error(ex.Message);
                 throw new HttpRequestException(ex.Message, ex, HttpStatusCode.InternalServerError);
             }
         }
@@ -73,17 +82,17 @@ namespace clutch_identity.Services
             {
                 var users = await userDbContext.Users
                 .ToListAsync();
+                Log.Information("Resource found for users");
                 return users.ToUserResources();
             }
             catch (Exception ex)
             {
-                var users = await userDbContext.Users
-                .ToListAsync();
-                return users.ToUserResources();
+                Log.Error(ex.Message) ;
+                throw new HttpRequestException(ex.Message, ex, HttpStatusCode.InternalServerError);
             }
         }
 
-        public async void DeleteUser(string id)
+        public async Task DeleteUser(string id)
         {
             try
             {
@@ -93,6 +102,7 @@ namespace clutch_identity.Services
                 if (existingUser is null)
                 {
                     var msg = $"User with id {id} does not exist";
+                    Log.Error(msg) ;
                     throw new NotFoundException(msg);
                 }
                 userDbContext.Users.Remove(existingUser);
@@ -100,10 +110,12 @@ namespace clutch_identity.Services
             }
             catch(NotFoundException ex)
             {
+                Log.Error(ex.Message);
                 throw new HttpRequestException(ex.Message, ex, HttpStatusCode.NotFound);
             }
             catch(Exception ex)
             {
+                Log.Error(ex.Message);
                 throw new HttpRequestException(ex.Message, ex, HttpStatusCode.InternalServerError);
             }
         }
@@ -117,17 +129,21 @@ namespace clutch_identity.Services
                 if (existingUser is null)
                 {
                     var msg = $"User with email {request.Email} does not exist";
+                    Log.Error(msg) ;
                     throw new NotFoundException(msg);
                 }
                 if (!(UserManager.VerifyPassword(request.Password, existingUser.Password)))
                 {
                     var message = "Incorrect password";
+                    Log.Error(message) ;
                     throw new InvalidRequestException(message);
                 }
+                Log.Information("User logged in");
                 return UserManager.GenerateToken(config, request, existingUser);
             }
             catch(Exception ex)
             {
+                Log.Error(ex.Message);
                 throw new HttpRequestException(ex.Message, ex, HttpStatusCode.InternalServerError);
             }
         }

@@ -12,6 +12,7 @@ using System.Text;
 using clutch_identity.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using clutch_identity.Services;
+using clutch_identity.Infrastructure.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,7 +53,7 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 //Inject services    
-builder.Services.AddScoped<UserService, IUserService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddDbContext<UserDBContext>(options =>
 {

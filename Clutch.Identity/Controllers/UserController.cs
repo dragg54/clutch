@@ -1,4 +1,7 @@
 ﻿using clutch_identity.Entities;
+using clutch_identity.Requests;
+using clutch_identity.Response;
+using clutch_identity.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -12,41 +15,86 @@ namespace clutch_identity.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController: ControllerBase
+    public class UserController : ControllerBase
     {
-        private IConfiguration config;
-        public UserController(IConfiguration config)
+        private readonly IConfiguration config;
+        private readonly IUserService userService; 
+        public UserController(IConfiguration config, IUserService userService)
         {
-            this.config = config; 
+            this.config = config;
+            this.userService = userService;
         }
-
-
 
         [HttpPost]
-        public async Task<string> Login(Users request)
+        public async Task<ActionResult<UserActionResponse>> CreateUser(PostUserRequest request)
         {
-           var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWTSettings:Key"]));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512Signature);
-            var claims = new List<Claim>
+            await userService.PostUser(request);
+            return Ok(new UserActionResponse()
             {
-                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new(JwtRegisteredClaimNames.Sub, request.Email),
-                new(JwtRegisteredClaimNames.Email, request.Email),
-                new(ClaimTypes.Role, "User"),
-                new("userId", request.Id.ToString())
-            };
-            var Sectoken = new JwtSecurityToken(config["JWTSettings:Issuer"],
-              config["JWTSettings:Issuer"],
-              claims,
-              expires: DateTime.Now.AddMinutes(120),
-              signingCredentials: credentials); ;
+                Message = "User created",
+                Data = request,
+                StatusCode = System.Net.HttpStatusCode.Created
+            });
+            //return CreatedAtAction(
+            //    nameof(GetUserById),
+            //    new {request}
+            //    new UserActionResponse()
+            //    {
+            //        Message = "User created",
+            //        Data = request,
+            //        StatusCode = System.Net.HttpStatusCode.Created
+            //    });
+        }
 
-            var token =  new JwtSecurityTokenHandler().WriteToken(Sectoken);
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<UserActionResponse>> GetUserById(long id)
+        {
+            var userResource = await userService.GetUser(id);
+            return Ok(new UserActionResponse()
+            {
+                Message = $"User with id {id} found",
+                Data = userResource,
+                StatusCode = System.Net.HttpStatusCode.OK
+            });
+        }
 
-            return token;
+        [HttpGet]
+        public async Task<ActionResult<UserActionResponse>> GetUsers()
+        {
+            var userResources = await userService.GetUsers();
+            return Ok(new UserActionResponse()
+            {
+                Message = $"Users found",
+                Data = userResources,
+                StatusCode = System.Net.HttpStatusCode.OK
+            });
         }
 
 
-      
+        [HttpPost("login")]
+        public async Task<ActionResult<UserActionResponse>> LoginUser(LoginUserRequest request)
+        {
+            var loginPayload = await userService.LoginUser(request);
+            return Ok(new UserActionResponse()
+            {
+                Message = $"Users with email {request.Email} logged in",
+                Data = loginPayload,
+                StatusCode = System.Net.HttpStatusCode.OK
+            });
+        }
+
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<UserActionResponse>> DeleteUser(string id)
+        {
+            await userService.DeleteUser(id);
+            return Ok(new UserActionResponse()
+            {
+                Message = $"Users with id {id} deleted",
+                Data = new {id},
+                StatusCode = System.Net.HttpStatusCode.OK
+            });
+        }
+
     }
 }

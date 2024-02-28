@@ -1,13 +1,15 @@
 ﻿using clutch_identity.Entities;
 using clutch_identity.Requests;
+using clutch_identity.Resources;
 
 namespace clutch_identity.Services
 {
     public interface IUserService
     {
-        void PostUser(PostUserRequest request);
-        Task<Users> GetUser(long userId);
-        Task<String> LoginUser(LoginUserRequest request);
-        void DeleteUser(string userId);
+        Task PostUser(PostUserRequest request);
+        Task<UserResource> GetUser(long userId);
+        Task<List<UserResource>> GetUsers();
+        Task<string> LoginUser(LoginUserRequest request);
+        Task DeleteUser(string userId);
     }
 }

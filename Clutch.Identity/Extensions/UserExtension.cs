@@ -15,7 +15,7 @@ namespace clutch_identity.Extensions
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Email = request.Email,
-                Password = PasswordManager.HashPassword(request.Password),
+                Password = UserManager.HashPassword(request.Password),
                 Role = (Role)Enum.Parse(typeof(Role), request.Role),
                 ActiveDate = DateTime.Now
             };
@@ -33,6 +33,20 @@ namespace clutch_identity.Extensions
                 Role = user.Role.ToString(),
                 ActiveDate = user.ActiveDate
             };
+        }
+
+        public static List<UserResource> ToUserResources(this List<Users> users)
+        {
+            return users.Select(user => new UserResource
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Password = user.Password,
+                Role = user.Role.ToString(),
+                ActiveDate = user.ActiveDate
+            }).ToList();
         }
     }
 }

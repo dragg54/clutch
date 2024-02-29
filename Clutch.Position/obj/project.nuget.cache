@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "wyFfbAnhQBMetaar2gJdFbkibkXoZWJG/Zew8zLN3y9qEwmaWRPG/2hubPnf3oyyFbZpl3FbAD9hMIqIti8eEg==",
+  "dgSpecHash": "LI2+MFR8KPvmgGNOadxLuAiSuhN+TNORY0TXweCIUQSQGVlJBk96vB19vcts3oQM7aDczdxOzcfV2FnD0jKc1g==",
   "success": true,
-  "projectFilePath": "C:\\Users\\HP 840 G5\\personal_projects\\clutch\\clutch-position\\clutch-position.csproj",
+  "projectFilePath": "C:\\Users\\HP 840 G5\\personal_projects\\clutch\\Clutch.Position\\clutch-position.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\HP 840 G5\\.nuget\\packages\\bouncycastle.cryptography\\2.2.1\\bouncycastle.cryptography.2.2.1.nupkg.sha512",
     "C:\\Users\\HP 840 G5\\.nuget\\packages\\google.protobuf\\3.25.1\\google.protobuf.3.25.1.nupkg.sha512",

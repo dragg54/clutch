@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\clutch-employee.props" />
+</Project>

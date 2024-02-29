@@ -1,7 +1,9 @@
 ﻿using clutch_employee.Data;
 using clutch_employee.Entities;
+using clutch_employee.Identity.Requests;
 using clutch_employee.Requests;
 using clutch_employee.Resource;
+
 namespace clutch_employee.Extensions
 {
     public static class EmployeeExtensions
@@ -80,6 +82,15 @@ namespace clutch_employee.Extensions
                 Age = employee.Age,
                 StartDate = employee.StartDate,
                 EmployeeStatus = employee.EmployeeStatus.ToString()
+            };
+        }
+
+        public static PostUserRequest ToUserRequest(this PostEmployeeRequest request){
+            return new PostUserRequest{
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                Email = request.Email,
+                Password = request.Email
             };
         }
     }

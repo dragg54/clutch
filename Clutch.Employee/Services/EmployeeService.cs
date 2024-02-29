@@ -13,6 +13,8 @@ using Clutch.Employee.Position.Client;
 using Clutch.Employee.Position.Response;
 using clutch_employee.Position.Entities;
 using clutch_employee.Position.Enums;
+using clutch_employee.Identity.Responses;
+using clutch_employee.Identity.Client;
 
 namespace clutch_employee.Services
 {
@@ -20,10 +22,12 @@ namespace clutch_employee.Services
     {
         private readonly EmployeeDbContext employeeDbContext;
         private readonly IPositionClient positionClient;
-        public EmployeeService(EmployeeDbContext employeeDbContext, IPositionClient positionClient)
+        private readonly IIdentityClient identityClient;
+        public EmployeeService(EmployeeDbContext employeeDbContext, IPositionClient positionClient, IIdentityClient identityClient)
         {
-            this.employeeDbContext = employeeDbContext ?? throw new ArgumentException();
-            this.positionClient = positionClient ?? throw new ArgumentNullException();
+            this.employeeDbContext = employeeDbContext ?? throw new ArgumentException(nameof(employeeDbContext));
+            this.positionClient = positionClient ?? throw new ArgumentNullException(nameof(positionClient));
+            this.identityClient = identityClient ?? throw new ArgumentNullException(nameof(identityClient));
         }
 
         public async Task CreateEmployee(PostEmployeeRequest request)
@@ -32,7 +36,7 @@ namespace clutch_employee.Services
             {
                 var existingEmployee = employeeDbContext.Employees.SingleOrDefault(emp => emp.EmployeeId == request.EmployeeId);
                 EmployeePositionResponse positionResponse = await positionClient.GetEmployeePositionResource(request.PositionUniqueReferenceNumber);
-
+                UserResponse userResponse = await identityClient.PostUser(request.ToUserRequest());
                 if (existingEmployee != null)
                 {
                     throw new DuplicateException($"Employee with id {existingEmployee.EmployeeId} already exists");
@@ -42,12 +46,12 @@ namespace clutch_employee.Services
 
                     throw new NotFoundException($"Position with {request.PositionUniqueReferenceNumber} not found");
                 }
-                if(((EmployeePosition)positionResponse.Data).PositionStatus == EmployeePositionStatus.Filled.ToString())
+                if (((EmployeePosition)positionResponse.Data).PositionStatus == EmployeePositionStatus.Filled.ToString())
                 {
                     var message = $"Position with id {request.PositionUniqueReferenceNumber} is not empty";
                     throw new InvalidOperationException(message);
                 }
-                if (positionResponse.StatusCode == HttpStatusCode.OK)
+                if (positionResponse.StatusCode == HttpStatusCode.OK && userResponse.StatusCode == HttpStatusCode.OK)
                 {
                     var newEmployee = request.ToAddEmployeeRequest();
                     await employeeDbContext.Employees.AddAsync(request.ToAddEmployeeRequest());
@@ -58,7 +62,7 @@ namespace clutch_employee.Services
             {
                 throw new HttpRequestException(ex.Message, ex, HttpStatusCode.BadRequest);
             }
-            catch(InvalidOperationException ex)
+            catch (InvalidOperationException ex)
             {
                 throw new HttpRequestException(ex.Message, ex, HttpStatusCode.BadRequest);
 
@@ -97,7 +101,7 @@ namespace clutch_employee.Services
                     var amendedEmployee = request.ToAmendEmployeeRequest(existingEmployee.EmployeeId, existingEmployee.StartDate);
                     await employeeDbContext.SaveChangesAsync();
                 }
-               
+
             }
             catch (NotFoundException ex)
             {

@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: clutch-idty-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: clutch.com
+      http:
+        paths:
+        - path: /api/identity
+          pathType: Prefix
+          backend:
+            service:
+              name: clutch-identity-clusterip-srv
+              port:
+                number: 80
+        - path: /api/employee
+          pathType: Prefix
+          backend:
+            service:
+              name: clutch-employee-clusterip-srv
+              port:
+                number: 80
+        - path: /api/position
+          pathType: Prefix
+          backend:
+            service:
+              name: clutch-position-clusterip-srv
+              port:
+                number: 80
+                

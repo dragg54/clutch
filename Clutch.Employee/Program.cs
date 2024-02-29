@@ -11,6 +11,7 @@ using Serilog;
 using System.Numerics;
 using Clutch.Employee.Position.Client;
 using clutch_employee.Infrastructure;
+using clutch_employee.Identity.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +31,7 @@ Log.Logger = new LoggerConfiguration()
 //Inject services    
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddHttpClient<IPositionClient, PositionClient>();
+builder.Services.AddHttpClient<IIdentityClient, IdentityClient>();
 
 builder.Services.AddDbContext<EmployeeDbContext>(options =>
 {

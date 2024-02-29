@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\HP 840 G5\\personal_projects\\clutch\\clutch-position\\clutch-position.csproj": {}
+    "C:\\Users\\HP 840 G5\\personal_projects\\clutch\\Clutch.Position\\clutch-position.csproj": {}
   },
   "projects": {
-    "C:\\Users\\HP 840 G5\\personal_projects\\clutch\\clutch-position\\clutch-position.csproj": {
+    "C:\\Users\\HP 840 G5\\personal_projects\\clutch\\Clutch.Position\\clutch-position.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\HP 840 G5\\personal_projects\\clutch\\clutch-position\\clutch-position.csproj",
+        "projectUniqueName": "C:\\Users\\HP 840 G5\\personal_projects\\clutch\\Clutch.Position\\clutch-position.csproj",
         "projectName": "clutch-position",
-        "projectPath": "C:\\Users\\HP 840 G5\\personal_projects\\clutch\\clutch-position\\clutch-position.csproj",
+        "projectPath": "C:\\Users\\HP 840 G5\\personal_projects\\clutch\\Clutch.Position\\clutch-position.csproj",
         "packagesPath": "C:\\Users\\HP 840 G5\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\HP 840 G5\\personal_projects\\clutch\\clutch-position\\obj\\",
+        "outputPath": "C:\\Users\\HP 840 G5\\personal_projects\\clutch\\Clutch.Position\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\HP 840 G5\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -35,7 +35,8 @@ namespace clutch_identity.Services
                     throw new DuplicateException(msg);
                 }
                 var newUser = request.ToAddUserRequest();
-                userDbContext.SaveChanges();
+                userDbContext.Users.Add(newUser);
+                await userDbContext.SaveChangesAsync();
                 Log.Information($"user with email {request.Email} created");
             }
             catch (DuplicateException ex)
@@ -106,7 +107,7 @@ namespace clutch_identity.Services
                     throw new NotFoundException(msg);
                 }
                 userDbContext.Users.Remove(existingUser);
-                userDbContext.SaveChanges();
+                await userDbContext.SaveChangesAsync();
             }
             catch(NotFoundException ex)
             {

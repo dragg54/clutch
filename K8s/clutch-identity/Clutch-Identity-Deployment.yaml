@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clutch-identity-deployment
+  labels:
+        app: clutch-identity
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: clutch-identity
+  template:
+    metadata:
+      labels:
+        app: clutch-identity
+    spec:
+      containers:
+        - name: clutch-identity
+          image: dragg54/clutch-identity:4.0
+          ports:
+          - containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: clutch-identity-clusterip-srv
+spec:
+  selector:
+    app: clutch-identity
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

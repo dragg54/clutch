@@ -118,3 +118,8 @@ C:\Users\HP 840 G5\personal_projects\clutch\Clutch.Identity\obj\Debug\net6.0\clu
 C:\Users\HP 840 G5\personal_projects\clutch\Clutch.Identity\obj\Debug\net6.0\clutch-identity.dll
 C:\Users\HP 840 G5\personal_projects\clutch\Clutch.Identity\obj\Debug\net6.0\refint\clutch-identity.dll
 C:\Users\HP 840 G5\personal_projects\clutch\Clutch.Identity\obj\Debug\net6.0\clutch-identity.pdb
+C:\Users\HP 840 G5\personal_projects\clutch\Clutch.Identity\bin\Debug\net6.0\clutch-identity.deps.json
+C:\Users\HP 840 G5\personal_projects\clutch\Clutch.Identity\bin\Debug\net6.0\clutch-identity.runtimeconfig.json
+C:\Users\HP 840 G5\personal_projects\clutch\Clutch.Identity\bin\Debug\net6.0\clutch-identity.pdb
+C:\Users\HP 840 G5\personal_projects\clutch\Clutch.Identity\obj\Debug\net6.0\clutch-identity.genruntimeconfig.cache
+C:\Users\HP 840 G5\personal_projects\clutch\Clutch.Identity\obj\Debug\net6.0\ref\clutch-identity.dll

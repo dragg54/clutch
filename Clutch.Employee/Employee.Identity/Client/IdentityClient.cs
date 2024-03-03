@@ -31,6 +31,7 @@ namespace clutch_employee.Identity.Client
                     string responseData = await response.Content.ReadAsStringAsync();
                     userResponse = new UserResponse
                     {
+                        Data = response,
                         Message = response.RequestMessage.ToString(),
                         StatusCode = response.StatusCode,
                     };
@@ -42,7 +43,6 @@ namespace clutch_employee.Identity.Client
                         Message = response.RequestMessage.ToString(),
                         StatusCode = response.StatusCode,
                     };
-                    Console.WriteLine("POST request failed with status code: " + response.StatusCode);
                 }
                 return userResponse;
             }

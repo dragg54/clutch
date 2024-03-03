@@ -15,6 +15,7 @@ using clutch_employee.Position.Entities;
 using clutch_employee.Position.Enums;
 using clutch_employee.Identity.Responses;
 using clutch_employee.Identity.Client;
+using System.Transactions;
 
 namespace clutch_employee.Services
 {
@@ -32,10 +33,16 @@ namespace clutch_employee.Services
 
         public async Task CreateEmployee(PostEmployeeRequest request)
         {
+           var transaction = employeeDbContext.Database.BeginTransaction();
             try
             {
                 var existingEmployee = employeeDbContext.Employees.SingleOrDefault(emp => emp.EmployeeId == request.EmployeeId);
                 EmployeePositionResponse positionResponse = await positionClient.GetEmployeePositionResource(request.PositionUniqueReferenceNumber);
+                if ((positionResponse.Data as EmployeePosition).PositionStatus == EmployeePositionStatus.Filled.ToString())
+                {
+                    var message = $"Position with id {request.PositionUniqueReferenceNumber} is not empty";
+                    throw new InvalidOperationException(message);
+                }
                 UserResponse userResponse = await identityClient.PostUser(request.ToUserRequest());
                 if (existingEmployee != null)
                 {
@@ -46,29 +53,28 @@ namespace clutch_employee.Services
 
                     throw new NotFoundException($"Position with {request.PositionUniqueReferenceNumber} not found");
                 }
-                if (((EmployeePosition)positionResponse.Data).PositionStatus == EmployeePositionStatus.Filled.ToString())
-                {
-                    var message = $"Position with id {request.PositionUniqueReferenceNumber} is not empty";
-                    throw new InvalidOperationException(message);
-                }
                 if (positionResponse.StatusCode == HttpStatusCode.OK && userResponse.StatusCode == HttpStatusCode.OK)
                 {
                     var newEmployee = request.ToAddEmployeeRequest();
                     await employeeDbContext.Employees.AddAsync(request.ToAddEmployeeRequest());
                     await employeeDbContext.SaveChangesAsync();
                 }
+                transaction.Commit();
             }
             catch (NotFoundException ex)
             {
+                transaction.Rollback();   
                 throw new HttpRequestException(ex.Message, ex, HttpStatusCode.BadRequest);
             }
             catch (InvalidOperationException ex)
             {
+                transaction.Rollback();
                 throw new HttpRequestException(ex.Message, ex, HttpStatusCode.BadRequest);
 
             }
             catch (Exception ex)
             {
+                transaction.Rollback();
                 var errMsg = "Unable to create employee";
                 Log.Error(errMsg, ex);
                 throw new HttpRequestException(errMsg, ex);

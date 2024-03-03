@@ -73,6 +73,29 @@ namespace clutch_position.Services
 
         }
 
+        public async Task AmendPositionStatus(PatchPositionStateRequest request, string id)
+        {
+            var existingPosition = await positionDbContext.Positions.FirstOrDefaultAsync(x => x.Id.ToString() == id);
+            if (existingPosition == null)
+            {
+                var errMsg = $"Position with id {id} does not exist";
+                throw new NotFoundException(errMsg);
+            }
+            try
+            {
+                existingPosition.PositionStatus =  (PositionStatus)Enum.Parse(typeof(PositionStatus), request.PositionStatus);
+                positionDbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                var errMsg = "Unable to amend position status";
+                Log.Error(errMsg, ex);
+                throw new Exception(errMsg, ex);
+            }
+
+        }
+        
+
         public async Task<List<PositionResource>> GetPositionsAync()
         {
             try

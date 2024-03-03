@@ -1,26 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using clutch_identity.Data;
+using System.Data;
 
-namespace clutch_identity.Requests
+namespace clutch_employee.Identity.Entities
 {
-    public class PostUserRequest
+    public class Users
     {
-        [Required]
+        public long Id { get; set; }
         public string FirstName { get; set; }
-
-        [Required]
         public string LastName { get; set; }
-                
-        [Required]
         public string Role { get; set; }
-
-        [Required]
         public string Email { get; set; }
-
-        [Required]
         public string Password { get; set; }
-
-        [Required]
         public DateTime ActiveDate { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using clutch_employee.Data;
 using clutch_employee.Entities;
+using clutch_employee.Identity.Entities;
 using clutch_employee.Identity.Requests;
 using clutch_employee.Requests;
 using clutch_employee.Resource;
@@ -85,12 +86,23 @@ namespace clutch_employee.Extensions
             };
         }
 
-        public static PostUserRequest ToUserRequest(this PostEmployeeRequest request){
+        public static PostUserRequest ToAddUserRequest(this PostEmployeeRequest request){
             return new PostUserRequest{
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Email = request.Email,
                 Password = request.Email
+            };
+        }
+
+        public static AmendUserRequest ToAmendUserRequest(this Users user)
+        {
+            return new AmendUserRequest
+            {
+                Id = user.Id.ToString(),
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email
             };
         }
     }

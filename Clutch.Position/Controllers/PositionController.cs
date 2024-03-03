@@ -62,6 +62,16 @@ namespace clutch_position.Controllers
             await _positionService.AmendPosition(request, id);
             return Ok($"position with id {id} updated");
         }
+
+        [HttpPatch("{id}/state")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PositionResource))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> PatchPositionStatus(string id, [FromBody] PatchPositionStateRequest request)
+        {
+            await _positionService.AmendPositionStatus(request, id);
+            return Ok($"position state with id {id} updated");
+        }
     }
 }
 

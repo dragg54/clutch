@@ -10,6 +10,7 @@ namespace clutch_position.Services
         Task<List<PositionResource>> GetPositionsAync();
         Task<PositionResource> GetPositionAsync(string id);
         Task AmendPosition(PutPositionRequest postPositionRequest, string id);
+        Task AmendPositionStatus(PatchPositionStateRequest request, string id);
 
     }
 }

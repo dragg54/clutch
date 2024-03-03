@@ -77,18 +77,30 @@ namespace clutch_identity.Services
             }
         }
 
-        public async Task<List<UserResource>> GetUsers()
-        {
+        public async Task PutUser(string id, PutUserRequest request){
             try
             {
-                var users = await userDbContext.Users
-                .ToListAsync();
-                Log.Information("Resource found for users");
-                return users.ToUserResources();
+                var existingUser = await userDbContext.Users.SingleOrDefaultAsync(
+                user => user.Id.ToString() == id
+                );
+                if (existingUser is null)
+                {
+                    var msg = "User does not exist";
+                    Log.Error(msg);
+                    throw new NotFoundException(msg);
+                }
+                request.ToAmendUserRequest(existingUser);
+                await userDbContext.SaveChangesAsync();
+                Log.Information($"user with email {id} updated");
+            }
+            catch (DuplicateException ex)
+            {
+                Log.Error(ex.Message);
+                throw new HttpRequestException(ex.Message, ex, HttpStatusCode.Conflict);
             }
             catch (Exception ex)
             {
-                Log.Error(ex.Message) ;
+                Log.Error(ex.Message);
                 throw new HttpRequestException(ex.Message, ex, HttpStatusCode.InternalServerError);
             }
         }
@@ -146,6 +158,32 @@ namespace clutch_identity.Services
             {
                 Log.Error(ex.Message);
                 throw new HttpRequestException(ex.Message, ex, HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<List<UserResource>> GetUsers(UserRequestQuery userRequestQuery)
+        {
+            try
+            {
+                var query =  userDbContext.Users.AsQueryable();
+            if(!String.IsNullOrEmpty(userRequestQuery.FirstName))
+            {
+                query = query.Where(user => user.FirstName == userRequestQuery.FirstName);
+            }
+            if(!String.IsNullOrEmpty(userRequestQuery.LastName))
+            {
+                query = query.Where(user => user.LastName == userRequestQuery.LastName);
+            }
+            if(!String.IsNullOrEmpty(userRequestQuery.Email))
+            {
+                query = query.Where(user => user.Email == userRequestQuery.Email);
+            }
+            return query.ToUserResources();
+            }
+            catch(Exception exception)
+            {
+                Log.Error(exception.Message);
+                throw new HttpRequestException(exception.Message, exception, HttpStatusCode.InternalServerError);
             }
         }
     }

@@ -8,6 +8,6 @@ namespace clutch_position.Requests
 {
     public class PatchPositionStateRequest
     {
-        public PositionStatus positionStatus{get;set;}
+        public string PositionStatus{get;set;}
     }
 }

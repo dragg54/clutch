@@ -8,8 +8,10 @@ namespace clutch_identity.Services
     {
         Task PostUser(PostUserRequest request);
         Task<UserResource> GetUser(long userId);
-        Task<List<UserResource>> GetUsers();
+        // Task<List<UserResource>> GetUsers();
         Task<string> LoginUser(LoginUserRequest request);
         Task DeleteUser(string userId);
+        Task PutUser(string id, PutUserRequest request);
+        Task <List<UserResource>> GetUsers(UserRequestQuery userRequestQuery);
     }
 }

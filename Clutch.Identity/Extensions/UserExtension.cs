@@ -48,5 +48,27 @@ namespace clutch_identity.Extensions
                 ActiveDate = user.ActiveDate
             }).ToList();
         }
+
+        public static void ToAmendUserRequest(this PutUserRequest request, Users existingUser)
+        {
+                existingUser.FirstName = request.FirstName;
+                existingUser.LastName = request.LastName;
+                existingUser.Email = request.Email;
+                existingUser.Role = (Role)Enum.Parse(typeof(Role), request.Role);
+        }
+
+        public static List<UserResource> ToUserResources(this IQueryable<Users> users)
+        {
+            return users.Select(user => new UserResource
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Password = user.Password,
+                Role = user.Role.ToString(),
+                ActiveDate = user.ActiveDate
+            }).ToList();
+        }
     }
 }

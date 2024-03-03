@@ -35,15 +35,6 @@ namespace clutch_identity.Controllers
                 Data = request,
                 StatusCode = System.Net.HttpStatusCode.Created
             });
-            //return CreatedAtAction(
-            //    nameof(GetUserById),
-            //    new {request}
-            //    new UserActionResponse()
-            //    {
-            //        Message = "User created",
-            //        Data = request,
-            //        StatusCode = System.Net.HttpStatusCode.Created
-            //    });
         }
 
         [HttpGet("{userId}")]
@@ -59,9 +50,9 @@ namespace clutch_identity.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<UserActionResponse>> GetUsers()
+        public async Task<ActionResult<UserActionResponse>> GetUsers([FromQuery] UserRequestQuery query)
         {
-            var userResources = await userService.GetUsers();
+            var userResources = await userService.GetUsers(query);
             return Ok(new UserActionResponse()
             {
                 Message = $"Users found",
@@ -69,7 +60,6 @@ namespace clutch_identity.Controllers
                 StatusCode = System.Net.HttpStatusCode.OK
             });
         }
-
 
         [HttpPost("login")]
         public async Task<ActionResult<UserActionResponse>> LoginUser(LoginUserRequest request)
@@ -91,6 +81,18 @@ namespace clutch_identity.Controllers
             return Ok(new UserActionResponse()
             {
                 Message = $"Users with id {id} deleted",
+                Data = new {id},
+                StatusCode = System.Net.HttpStatusCode.OK
+            });
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<UserActionResponse>> PutUser(string id, PutUserRequest request)
+        {
+            await userService.PutUser(id, request);
+            return Ok(new UserActionResponse()
+            {
+                Message = $"Users with id {id} updated",
                 Data = new {id},
                 StatusCode = System.Net.HttpStatusCode.OK
             });

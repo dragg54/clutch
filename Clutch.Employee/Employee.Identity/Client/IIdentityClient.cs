@@ -13,5 +13,6 @@ namespace clutch_employee.Identity.Client
         Task<UserResponse> PutUser(AmendUserRequest request);
         Task<UserResponse> GetUserByEmail(string email);
         Task<UserResponse> GetUserResource(string id);
+        Task<UserResponse> DeleteUser(string id);
     }
 }

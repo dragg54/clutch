@@ -74,5 +74,22 @@ namespace clutch_employee.Controllers
             };
             return Ok(response);
         }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(EmployeeResource))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteEmployee(string id)
+        {
+            await _employeeService.DeleteEmployee(id);
+            var message = $"Employee with id {id} deleted";
+            var response = new EmployeeActionResponse()
+            {
+                StatusCode = HttpStatusCode.OK,
+                Message = message,
+                Data = id
+            };
+            return Ok(response);
+        }
     }
 }

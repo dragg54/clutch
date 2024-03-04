@@ -67,7 +67,7 @@ namespace clutch_employee.Services
                         });
                         await employeeDbContext.SaveChangesAsync();
                     }
-                    dbContextTransaction.Commit();
+                    await dbContextTransaction.CommitAsync();
                 }
                 catch (NotFoundException ex)
                 {
@@ -109,22 +109,28 @@ namespace clutch_employee.Services
 
                         throw new NotFoundException($"Position with {request.PositionUniqueReferenceNumber} not found");
                     }
-                    UserResponse getUserResponse = await identityClient.GetUserByEmail(request.Email);
-                    if (getUserResponse.Data == null)
-                    {
-                        throw new NotFoundException($"user with email {request.Email} not found");
-                    }
-                    UserResponse userResponse = await identityClient.PutUser((getUserResponse.Data as List<Users>)[0].ToAmendUserRequest());
                     if (((EmployeePosition)positionResponse.Data).PositionStatus == EmployeePositionStatus.Filled.ToString())
                     {
                         var message = $"Position with id {request.PositionUniqueReferenceNumber} is not empty";
                         throw new InvalidOperationException(message);
                     }
+                    if (positionResponse.StatusCode == HttpStatusCode.NotFound)
+                    {
+
+                        throw new NotFoundException($"User with email {existingEmployee.Email} not found");
+                    }
+                    UserResponse getUserResponse = await identityClient.GetUserByEmail(existingEmployee.Email);
+                    if (getUserResponse.Data == null)
+                    {
+                        throw new NotFoundException($"user with email {request.Email} not found");
+                    }
+                    UserResponse userResponse = await identityClient.PutUser((getUserResponse.Data as List<Users>)[0].ToAmendUserRequest());
                     if (positionResponse.StatusCode == HttpStatusCode.OK)
                     {
                         var amendedEmployee = request.ToAmendEmployeeRequest(existingEmployee.EmployeeId, existingEmployee.StartDate);
                         await employeeDbContext.SaveChangesAsync();
                     }
+                    await dbContextTransaction.CommitAsync();
 
                 }
                 catch (NotFoundException ex)
@@ -133,16 +139,17 @@ namespace clutch_employee.Services
                 }
                 catch (InvalidOperationException ex)
                 {
+                    dbContextTransaction.Rollback();
                     throw new HttpRequestException(ex.Message, ex, HttpStatusCode.BadRequest);
 
                 }
                 catch (Exception ex)
                 {
+                    dbContextTransaction.Rollback();
                     var errMsg = "Unable to create employee";
                     Log.Error(errMsg, ex);
                     throw new HttpRequestException(errMsg, ex);
                 }
-
             }
         }
 
@@ -181,6 +188,56 @@ namespace clutch_employee.Services
             {
                 Log.Error("Unable to get employee", ex);
                 throw new HttpRequestException(ex.Message, ex, HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task DeleteEmployee(string id)
+        {
+            using (var dbContextTransaction = employeeDbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    var existingEmployee = await employeeDbContext.Employees.FirstOrDefaultAsync(x => x.Id.ToString() == id);
+                    EmployeePositionResponse positionResponse = await positionClient.GetEmployeePositionResource(id);
+                    if (existingEmployee == null)
+                    {
+                        var errMsg = $"employee with id {id} does not exist";
+                        throw new NotFoundException(errMsg);
+                    }
+                    if (positionResponse.StatusCode == HttpStatusCode.NotFound)
+                    {
+
+                        throw new NotFoundException($"Position with {id} not found");
+                    }
+                    UserResponse getUserResponse = await identityClient.GetUserByEmail(existingEmployee.Email);
+                    if (getUserResponse.Data == null || !(getUserResponse.Data as List<object>).Any())
+                    {
+                        throw new NotFoundException($"user with email {existingEmployee.Email} not found");
+                    }
+                    UserResponse deleteUserResponse = await identityClient.DeleteUser(((getUserResponse.Data as List<Users>)[0]).Id.ToString());
+                    if (deleteUserResponse.StatusCode == HttpStatusCode.OK)
+                    {
+                        employeeDbContext.Employees.Remove(existingEmployee);
+                    }
+                }
+                catch (NotFoundException ex)
+                {
+                    throw new HttpRequestException(ex.Message, ex, HttpStatusCode.BadRequest);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    dbContextTransaction.Rollback();
+                    throw new HttpRequestException(ex.Message, ex, HttpStatusCode.BadRequest);
+
+                }
+                catch (Exception ex)
+                {
+                    dbContextTransaction.Rollback();
+                    var errMsg = "Unable to create employee";
+                    Log.Error(errMsg, ex);
+                    throw new HttpRequestException(errMsg, ex);
+                }
+
             }
         }
     }

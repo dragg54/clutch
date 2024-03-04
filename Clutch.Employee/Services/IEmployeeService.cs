@@ -10,7 +10,6 @@ namespace clutch_employee.Services
         Task<List<EmployeeResource>> GetEmployeesAync();
         Task<EmployeeResource> GetEmployeeAsync(string id);
         Task AmendEmployee(PutEmployeeRequest postEmployeeRequest, string id);
-
-
+        Task DeleteEmployee(string id);
     }
 }

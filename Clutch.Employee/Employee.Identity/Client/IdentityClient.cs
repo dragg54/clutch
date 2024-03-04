@@ -141,5 +141,38 @@ namespace clutch_employee.Identity.Client
                 return response;
             }
         }
+
+        public async Task<UserResponse> DeleteUser(string id)
+        {
+            try
+            {
+                string url = config.GetSection("EmployeeIdentity")["BaseURL"];
+                HttpResponseMessage response = await client.DeleteAsync($"{url}/api/user/{id}");
+                UserResponse userResponse;
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseData = await response.Content.ReadAsStringAsync();
+                    userResponse = new UserResponse
+                    {
+                        Data = response,
+                        Message = response.RequestMessage.ToString(),
+                        StatusCode = response.StatusCode,
+                    };
+                }
+                else
+                {
+                    userResponse = new UserResponse
+                    {
+                        Message = response.RequestMessage.ToString(),
+                        StatusCode = response.StatusCode,
+                    };
+                }
+                return userResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException(ex.Message, ex);
+            }
+        }
     }
 }

@@ -40,17 +40,12 @@ namespace clutch_employee.Services
                 {
 
                     var existingEmployee = employeeDbContext.Employees.SingleOrDefault(emp => emp.EmployeeId == request.EmployeeId);
-                    EmployeePositionResponse positionResponse = await positionClient.GetEmployeePositionResource(request.PositionUniqueReferenceNumber);
-                    var errMsg = "";
-                    if ((positionResponse.Data as EmployeePosition).PositionStatus == EmployeePositionStatus.Filled.ToString())
-                    {
-                        var message = $"Position with id {request.PositionUniqueReferenceNumber} is not empty";
-                        throw new InvalidOperationException(message);
-                    }
                     if (existingEmployee != null)
                     {
                         throw new DuplicateException($"Employee with id {existingEmployee.EmployeeId} already exists");
                     }
+                    EmployeePositionResponse positionResponse = await positionClient.GetEmployeePositionResource(request.PositionUniqueReferenceNumber);
+                    var errMsg = "";
                     switch (positionResponse.StatusCode)
                     {
                         case HttpStatusCode.NotFound:
@@ -59,6 +54,11 @@ namespace clutch_employee.Services
                         case HttpStatusCode.BadRequest:
                             errMsg = $"Failed to get position with uniqueReferenceNumer {request.PositionUniqueReferenceNumber}";
                             throw new InvalidRequestException(errMsg);
+                    }
+                    if ((positionResponse.Data as EmployeePosition).PositionStatus == EmployeePositionStatus.Filled.ToString())
+                    {
+                        var message = $"Position with id {request.PositionUniqueReferenceNumber} is not empty";
+                        throw new InvalidOperationException(message);
                     }
                     UserResponse userResponse = await identityClient.PostUser(request.ToAddUserRequest());
                     switch (userResponse.StatusCode)
@@ -111,13 +111,13 @@ namespace clutch_employee.Services
                 try
                 {
                     var existingEmployee = await employeeDbContext.Employees.FirstOrDefaultAsync(x => x.Id.ToString() == id);
-                    EmployeePositionResponse positionResponse = await positionClient.GetEmployeePositionResource(request.PositionUniqueReferenceNumber);
                     var errMsg = "";
                     if (existingEmployee == null)
                     {
                         errMsg = $"employee with id {id} does not exist";
                         throw new NotFoundException(errMsg);
                     }
+                    EmployeePositionResponse positionResponse = await positionClient.GetEmployeePositionResource(request.PositionUniqueReferenceNumber);
                     switch (positionResponse.StatusCode)
                     {
                         case HttpStatusCode.NotFound:
@@ -218,12 +218,12 @@ namespace clutch_employee.Services
                 try
                 {
                     var existingEmployee = await employeeDbContext.Employees.FirstOrDefaultAsync(x => x.Id.ToString() == id);
-                    EmployeePositionResponse positionResponse = await positionClient.GetEmployeePositionResource(id);
                     if (existingEmployee == null)
                     {
                         var errMsg = $"employee with id {id} does not exist";
                         throw new NotFoundException(errMsg);
                     }
+                    EmployeePositionResponse positionResponse = await positionClient.GetEmployeePositionResource(id);
                     if (positionResponse.StatusCode == HttpStatusCode.NotFound)
                     {
                         throw new NotFoundException($"Position with {id} not found");

@@ -9,7 +9,7 @@ using clutch_employee.Data.Contexts;
 using clutch_employee.Services;
 using Serilog;
 using System.Numerics;
-using Clutch.Employee.Position.Client;
+using Clutch.Position.Client;
 using clutch_employee.Infrastructure;
 using clutch_employee.Identity.Client;
 

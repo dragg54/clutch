@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: clutch-position
-          image: dragg54/clutch-position:1.0
+          image: dragg54/clutch-position:7.0
           ports:
           - containerPort: 80
 

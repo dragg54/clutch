@@ -10,6 +10,7 @@ using clutch_employee.Position.Entities;
 using clutch_employee.Identity.Requests;
 using clutch_employee.Identity.Responses;
 using clutch_employee.Position.Requests;
+using Serilog;
 
 namespace Clutch.Position.Client
 {
@@ -29,6 +30,7 @@ namespace Clutch.Position.Client
             try
             {
                 var url = configuration.GetSection("EmployeePosition")["BaseURL"];
+                Log.Information(url);
                 EmployeePosition employeePosition = await client.GetFromJsonAsync<EmployeePosition>($"{url}/api/Position/{id}");
                 if (employeePosition is not null)
                 {

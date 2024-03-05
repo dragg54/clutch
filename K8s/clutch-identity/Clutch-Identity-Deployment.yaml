@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: clutch-identity
-          image: dragg54/clutch-identity:4.0
+          image: dragg54/clutch-identity:5.0
           ports:
           - containerPort: 80
 

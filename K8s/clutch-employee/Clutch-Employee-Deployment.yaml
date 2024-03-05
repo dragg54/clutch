@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: clutch-employee
-          image: dragg54/clutch-employee:beta
+          image: dragg54/clutch-employee:14.0
           ports:
           - containerPort: 80
 

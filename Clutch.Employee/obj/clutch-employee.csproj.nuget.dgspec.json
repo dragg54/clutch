@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\HP 840 G5\\personal_projects\\clutch\\Clutch.Employee\\clutch-employee.csproj": {}
+    "c:\\Users\\HP 840 G5\\personal_projects\\clutch\\Clutch.Employee\\clutch-employee.csproj": {}
   },
   "projects": {
-    "C:\\Users\\HP 840 G5\\personal_projects\\clutch\\Clutch.Employee\\clutch-employee.csproj": {
+    "c:\\Users\\HP 840 G5\\personal_projects\\clutch\\Clutch.Employee\\clutch-employee.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\HP 840 G5\\personal_projects\\clutch\\Clutch.Employee\\clutch-employee.csproj",
+        "projectUniqueName": "c:\\Users\\HP 840 G5\\personal_projects\\clutch\\Clutch.Employee\\clutch-employee.csproj",
         "projectName": "clutch-employee",
-        "projectPath": "C:\\Users\\HP 840 G5\\personal_projects\\clutch\\Clutch.Employee\\clutch-employee.csproj",
+        "projectPath": "c:\\Users\\HP 840 G5\\personal_projects\\clutch\\Clutch.Employee\\clutch-employee.csproj",
         "packagesPath": "C:\\Users\\HP 840 G5\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\HP 840 G5\\personal_projects\\clutch\\Clutch.Employee\\obj\\",
+        "outputPath": "c:\\Users\\HP 840 G5\\personal_projects\\clutch\\Clutch.Employee\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\HP 840 G5\\AppData\\Roaming\\NuGet\\NuGet.Config",

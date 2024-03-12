@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "c8CyE8HEKfTi49fAI8M3Vu+pi9Dh4dIyLKbtplnd77tGESFHpFAo2gUmDDiebO+0L75wNa1U/cHipx0XAh4QGw==",
+  "dgSpecHash": "cEcia1OKHYGhWiiJPlkJii/iczbJEGCVjQ0Zbpu9rWKg2LMXjS9pWunPELpaKvkZPg6kxnj6vkRBSh6gKPQiew==",
   "success": true,
-  "projectFilePath": "C:\\Users\\HP 840 G5\\personal_projects\\clutch\\Clutch.Employee\\clutch-employee.csproj",
+  "projectFilePath": "c:\\Users\\HP 840 G5\\personal_projects\\clutch\\Clutch.Employee\\clutch-employee.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\HP 840 G5\\.nuget\\packages\\autofac\\8.0.0\\autofac.8.0.0.nupkg.sha512",
     "C:\\Users\\HP 840 G5\\.nuget\\packages\\autofac.extensions.dependencyinjection\\9.0.0\\autofac.extensions.dependencyinjection.9.0.0.nupkg.sha512",
